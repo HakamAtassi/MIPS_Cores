@@ -167,3 +167,134 @@ module mux_4_32b_tb;
 
 endmodule
 
+
+
+module SignExtender_tb;
+
+    reg [15:0] extend=16'b0000000000000000;
+    wire [31:0] extended;
+
+    integer errors=0;
+    reg sign=1'b0;
+    reg expected=32'b0;
+
+
+    SignExtender dut(extend,extended);
+
+    initial begin
+        $display("SignExtender test starting...\n");
+        $dumpfile("SignExtender_tb.vcd");
+        $dumpvars;
+    end
+
+
+    initial begin 
+        for(integer i=0;i<=65536;i++) begin
+            extend=extend+1; #10;
+        end
+    end
+
+    initial begin 
+        expected <= { {16{extend[15]}}, extend[15:0] };
+    end
+
+    initial begin
+        if (extend[15]==0 && extended[31:16]!=0) 
+            $display("Error. Expected %X, got %X",expected,extended);
+            errors=errors+1;
+        if (extend[15]==1 && extended[31:16]!=16'b1111111111111111)
+            $display("Error. Expected %X, got %X",expected,extended);
+            errors=errors+1;
+    end
+
+    initial begin
+
+        $display("SignExtender tests complete. %d errors \n=======\n",errors);
+    end
+
+endmodule
+
+
+
+
+
+module AluDecoder_tb;
+
+    reg [1:0] AluOp;
+    reg [5:0] funct;
+    reg [2:0] AluControl;
+
+    
+
+
+endmodule
+
+
+module mainDecoder_tb;
+
+    wire MemWrite, RegWrite, RegDst, ALUSrc, MemtoReg, Branch, Jump;
+    wire [1:0] ALUOp;
+    reg [5:0] Opcode;
+    
+    //assign {RegWrite,RegDst,ALUSrc,Branch,MemWrite,MemtoReg,ALUOp,Jump}=controls;
+
+
+    wire controls = {RegWrite,RegDst,ALUSrc,Branch,MemWrite,MemtoReg,ALUOp,Jump};
+
+    integer errors=0;
+
+    initial begin
+        $display("mainDecoder test starting...\n");
+        $dumpfile("mainDecoder_tb.vcd");
+        $dumpvars;
+    end
+
+    mainDecoder dut (MemWrite, RegWrite, RegDst, ALUSrc, MemtoReg, Branch, ALUOp, Jump, Opcode);
+
+
+    initial begin
+        Opcode<=6'b000000; #10; //R-type
+        Opcode<=6'b100011; #10; //lw
+        Opcode<=6'b101011; #10; //sw
+        Opcode<=6'b000100; #10; //beq
+        Opcode<=6'b001000; #10; //addi
+        Opcode<=6'b000010; #10; //j
+    end
+
+
+    initial begin 
+        if(Opcode==6'b000000 && controls!=9'b110000100) 
+            errors=errors+1;
+            $display("Error. Expected 11000100, got %X",controls);
+        if(Opcode==6'b100011 && controls!=9'b101001000)
+            errors=errors+1;
+            $display("Error. Expected 100011, got %X",controls);
+        
+        if (Opcode==6'b101011 && controls!=9'b0x101x000)
+            errors=errors+1;
+            $display("Error. Expected 0x101x000, got %X",controls);
+
+        if (Opcode==6'b000100 && controls!=9'b0x010x010)
+            errors=errors+1;
+            $display("Error. Expected 0x010x010, got %X",controls);
+
+        if (Opcode==6'b001000 && controls!=9'b101000000)
+            errors=errors+1;
+            $display("Error. Expected 101000000, got %X",controls);
+       
+        if (Opcode==6'b000010 && controls!=9'b0xxx0xxx1)
+            errors=errors+1;
+            $display("Error. Expected 0xxx0xxx1, got %X",controls);
+    end
+
+
+
+
+    initial begin
+        
+        $display("mainDecoder tests complete. %d errors \n=======\n",errors);
+    end
+
+
+
+endmodule

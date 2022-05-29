@@ -1,0 +1,569 @@
+$date
+	Mon May 30 00:39:55 2022
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1ns
+$end
+$scope module AluDecoder $end
+$var wire 2 ! AluOP [1:0] $end
+$var wire 6 " funct [5:0] $end
+$var reg 3 # AluControl [2:0] $end
+$upscope $end
+$scope module AluDecoder_tb $end
+$upscope $end
+$scope module Dflipflop $end
+$var wire 32 $ D [31:0] $end
+$var wire 1 % clk $end
+$var wire 1 & reset $end
+$var reg 32 ' Q [31:0] $end
+$upscope $end
+$scope module MIPS_Single_Cycle $end
+$upscope $end
+$scope module SignExtender_tb $end
+$var wire 32 ( extended [31:0] $end
+$var reg 1 ) expected $end
+$var reg 16 * extend [15:0] $end
+$var reg 1 + sign $end
+$var integer 32 , errors [31:0] $end
+$scope module dut $end
+$var wire 16 - extend [15:0] $end
+$var wire 32 . extended [31:0] $end
+$upscope $end
+$scope begin $ivl_for_loop8 $end
+$var integer 32 / i [31:0] $end
+$upscope $end
+$upscope $end
+$scope module adder $end
+$var wire 32 0 SrcA [31:0] $end
+$var wire 32 1 SrcB [31:0] $end
+$var wire 32 2 Y [31:0] $end
+$upscope $end
+$scope module data_memory $end
+$var wire 32 3 A [31:0] $end
+$var wire 32 4 RD [31:0] $end
+$var wire 32 5 WD [31:0] $end
+$var wire 1 6 WE $end
+$var wire 1 7 clk $end
+$upscope $end
+$scope module instruction_memory $end
+$var wire 6 8 A [5:0] $end
+$var wire 32 9 RD [31:0] $end
+$upscope $end
+$scope module mainDecoder_tb $end
+$var wire 1 : controls $end
+$var wire 1 ; RegWrite $end
+$var wire 1 < RegDst $end
+$var wire 1 = MemtoReg $end
+$var wire 1 > MemWrite $end
+$var wire 1 ? Jump $end
+$var wire 1 @ Branch $end
+$var wire 1 A ALUSrc $end
+$var wire 2 B ALUOp [1:0] $end
+$var reg 6 C Opcode [5:0] $end
+$var integer 32 D errors [31:0] $end
+$scope module dut $end
+$var wire 6 E Opcode [5:0] $end
+$var wire 1 ; RegWrite $end
+$var wire 1 < RegDst $end
+$var wire 1 = MemtoReg $end
+$var wire 1 > MemWrite $end
+$var wire 1 ? Jump $end
+$var wire 1 @ Branch $end
+$var wire 1 A ALUSrc $end
+$var wire 2 F ALUOp [1:0] $end
+$var reg 9 G controls [8:0] $end
+$upscope $end
+$upscope $end
+$scope module mux_2_32b_tb $end
+$var wire 32 H out [31:0] $end
+$var reg 32 I input0 [31:0] $end
+$var reg 32 J input1 [31:0] $end
+$var reg 1 K select $end
+$var integer 32 L error [31:0] $end
+$scope module dut $end
+$var wire 32 M D0 [31:0] $end
+$var wire 32 N D1 [31:0] $end
+$var wire 1 K sel $end
+$var wire 32 O out [31:0] $end
+$upscope $end
+$scope begin $ivl_for_loop0 $end
+$var integer 32 P i [31:0] $end
+$upscope $end
+$scope begin $ivl_for_loop1 $end
+$var integer 32 Q j [31:0] $end
+$upscope $end
+$scope begin $ivl_for_loop2 $end
+$var integer 32 R j [31:0] $end
+$upscope $end
+$upscope $end
+$scope module mux_4_32b_tb $end
+$var wire 32 S out [31:0] $end
+$var reg 32 T input0 [31:0] $end
+$var reg 32 U input1 [31:0] $end
+$var reg 32 V input2 [31:0] $end
+$var reg 32 W input3 [31:0] $end
+$var reg 2 X select [1:0] $end
+$var integer 32 Y error [31:0] $end
+$scope module dut $end
+$var wire 32 Z D0 [31:0] $end
+$var wire 32 [ D1 [31:0] $end
+$var wire 32 \ D2 [31:0] $end
+$var wire 32 ] D3 [31:0] $end
+$var wire 2 ^ sel [1:0] $end
+$var wire 32 _ out [31:0] $end
+$upscope $end
+$scope begin $ivl_for_loop3 $end
+$var integer 32 ` i [31:0] $end
+$upscope $end
+$scope begin $ivl_for_loop4 $end
+$var integer 32 a j [31:0] $end
+$upscope $end
+$scope begin $ivl_for_loop5 $end
+$var integer 32 b j [31:0] $end
+$upscope $end
+$scope begin $ivl_for_loop6 $end
+$var integer 32 c j [31:0] $end
+$upscope $end
+$scope begin $ivl_for_loop7 $end
+$var integer 32 d j [31:0] $end
+$upscope $end
+$upscope $end
+$scope module registerFile $end
+$var wire 5 e A1 [4:0] $end
+$var wire 5 f A2 [4:0] $end
+$var wire 5 g A3 [4:0] $end
+$var wire 32 h RD1 [31:0] $end
+$var wire 32 i RD2 [31:0] $end
+$var wire 32 j WD3 [31:0] $end
+$var wire 1 k WE3 $end
+$var wire 1 l clk $end
+$upscope $end
+$scope module sl2 $end
+$var wire 32 m A [31:0] $end
+$var wire 32 n Y [31:0] $end
+$upscope $end
+$scope module AluDecoder $end
+$upscope $end
+$scope module AluDecoder_tb $end
+$upscope $end
+$scope module Dflipflop $end
+$upscope $end
+$scope module MIPS_Single_Cycle $end
+$upscope $end
+$scope module SignExtender_tb $end
+$scope module dut $end
+$upscope $end
+$scope begin $ivl_for_loop8 $end
+$upscope $end
+$upscope $end
+$scope module adder $end
+$upscope $end
+$scope module data_memory $end
+$upscope $end
+$scope module instruction_memory $end
+$upscope $end
+$scope module mainDecoder_tb $end
+$scope module dut $end
+$upscope $end
+$upscope $end
+$scope module mux_2_32b_tb $end
+$scope module dut $end
+$upscope $end
+$scope begin $ivl_for_loop0 $end
+$upscope $end
+$scope begin $ivl_for_loop1 $end
+$upscope $end
+$scope begin $ivl_for_loop2 $end
+$upscope $end
+$upscope $end
+$scope module mux_4_32b_tb $end
+$scope module dut $end
+$upscope $end
+$scope begin $ivl_for_loop3 $end
+$upscope $end
+$scope begin $ivl_for_loop4 $end
+$upscope $end
+$scope begin $ivl_for_loop5 $end
+$upscope $end
+$scope begin $ivl_for_loop6 $end
+$upscope $end
+$scope begin $ivl_for_loop7 $end
+$upscope $end
+$upscope $end
+$scope module registerFile $end
+$upscope $end
+$scope module sl2 $end
+$upscope $end
+$scope module AluDecoder $end
+$upscope $end
+$scope module AluDecoder_tb $end
+$upscope $end
+$scope module Dflipflop $end
+$upscope $end
+$scope module MIPS_Single_Cycle $end
+$upscope $end
+$scope module SignExtender_tb $end
+$scope module dut $end
+$upscope $end
+$scope begin $ivl_for_loop8 $end
+$upscope $end
+$upscope $end
+$scope module adder $end
+$upscope $end
+$scope module data_memory $end
+$upscope $end
+$scope module instruction_memory $end
+$upscope $end
+$scope module mainDecoder_tb $end
+$scope module dut $end
+$upscope $end
+$upscope $end
+$scope module mux_2_32b_tb $end
+$scope module dut $end
+$upscope $end
+$scope begin $ivl_for_loop0 $end
+$upscope $end
+$scope begin $ivl_for_loop1 $end
+$upscope $end
+$scope begin $ivl_for_loop2 $end
+$upscope $end
+$upscope $end
+$scope module mux_4_32b_tb $end
+$scope module dut $end
+$upscope $end
+$scope begin $ivl_for_loop3 $end
+$upscope $end
+$scope begin $ivl_for_loop4 $end
+$upscope $end
+$scope begin $ivl_for_loop5 $end
+$upscope $end
+$scope begin $ivl_for_loop6 $end
+$upscope $end
+$scope begin $ivl_for_loop7 $end
+$upscope $end
+$upscope $end
+$scope module registerFile $end
+$upscope $end
+$scope module sl2 $end
+$upscope $end
+$scope module AluDecoder $end
+$upscope $end
+$scope module AluDecoder_tb $end
+$upscope $end
+$scope module Dflipflop $end
+$upscope $end
+$scope module MIPS_Single_Cycle $end
+$upscope $end
+$scope module SignExtender_tb $end
+$scope module dut $end
+$upscope $end
+$scope begin $ivl_for_loop8 $end
+$upscope $end
+$upscope $end
+$scope module adder $end
+$upscope $end
+$scope module data_memory $end
+$upscope $end
+$scope module instruction_memory $end
+$upscope $end
+$scope module mainDecoder_tb $end
+$scope module dut $end
+$upscope $end
+$upscope $end
+$scope module mux_2_32b_tb $end
+$scope module dut $end
+$upscope $end
+$scope begin $ivl_for_loop0 $end
+$upscope $end
+$scope begin $ivl_for_loop1 $end
+$upscope $end
+$scope begin $ivl_for_loop2 $end
+$upscope $end
+$upscope $end
+$scope module mux_4_32b_tb $end
+$scope module dut $end
+$upscope $end
+$scope begin $ivl_for_loop3 $end
+$upscope $end
+$scope begin $ivl_for_loop4 $end
+$upscope $end
+$scope begin $ivl_for_loop5 $end
+$upscope $end
+$scope begin $ivl_for_loop6 $end
+$upscope $end
+$scope begin $ivl_for_loop7 $end
+$upscope $end
+$upscope $end
+$scope module registerFile $end
+$upscope $end
+$scope module sl2 $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bz00 n
+bz m
+zl
+zk
+bz j
+bx i
+bx h
+bz g
+bz f
+bz e
+b0 d
+b0 c
+b0 b
+b0 a
+b0 `
+b1 _
+b0 ^
+b1 ]
+b1 \
+b1 [
+b1 Z
+b0 Y
+b0 X
+b1 W
+b1 V
+b1 U
+b1 T
+b1 S
+b0 R
+b0 Q
+b0 P
+b1 O
+b1 N
+b1 M
+b0 L
+1K
+b1 J
+b1 I
+b1 H
+b110000100 G
+b10 F
+b0 E
+b0 D
+b0 C
+b10 B
+0A
+0@
+0?
+0>
+0=
+1<
+1;
+0:
+bx 9
+bz 8
+z7
+z6
+bz 5
+bx 4
+bz 3
+bx 2
+bz 1
+bz 0
+b0 /
+b1 .
+b1 -
+b10 ,
+0+
+b1 *
+1)
+b1 (
+bx '
+z&
+z%
+bz $
+bx #
+bz "
+bz !
+$end
+#10
+0<
+1A
+1=
+b0 B
+b0 F
+b101001000 G
+b100011 C
+b100011 E
+b10 T
+b10 Z
+b1 a
+b1 X
+b1 ^
+b10 J
+b10 N
+b1 R
+0K
+b10 (
+b10 .
+b10 *
+b10 -
+b1 /
+#20
+0;
+x<
+1>
+x=
+b0x101x000 G
+b101011 C
+b101011 E
+b11 H
+b11 O
+b11 T
+b11 Z
+b10 a
+b10 X
+b10 ^
+b11 J
+b11 N
+b10 R
+1K
+b1 P
+b11 (
+b11 .
+b11 *
+b11 -
+b10 /
+b10 U
+b10 [
+b1 b
+b10 I
+b10 M
+b1 Q
+#30
+0A
+1@
+0>
+b1 B
+b1 F
+b0x010x010 G
+b100 C
+b100 E
+b1 S
+b1 _
+b10 H
+b10 O
+b100 T
+b100 Z
+b11 a
+b11 X
+b11 ^
+b100 J
+b100 N
+b11 R
+0K
+b100 (
+b100 .
+b100 *
+b100 -
+b11 /
+b10 V
+b10 \
+b1 c
+#40
+1;
+0<
+1A
+0@
+0=
+b0 B
+b0 F
+b101000000 G
+b1000 C
+b1000 E
+b101 S
+b101 _
+b101 H
+b101 O
+b101 T
+b101 Z
+b100 a
+b0 X
+b0 ^
+b1 `
+b101 J
+b101 N
+b100 R
+1K
+b10 P
+b101 (
+b101 .
+b101 *
+b101 -
+b100 /
+b11 U
+b11 [
+b10 b
+b11 I
+b11 M
+b10 Q
+b10 W
+b10 ]
+b1 d
+#50
+1:
+0;
+x<
+xA
+x@
+x=
+bx B
+bx F
+1?
+b0xxx0xxx1 G
+b10 C
+b10 E
+b11 S
+b11 _
+b11 H
+b11 O
+b110 T
+b110 Z
+b101 a
+b1 X
+b1 ^
+b110 J
+b110 N
+b101 R
+0K
+b110 (
+b110 .
+b110 *
+b110 -
+b101 /
+#60
+b11 S
+b11 _
+b111 H
+b111 O
+b111 T
+b111 Z
+b110 a
+b10 X
+b10 ^
+b111 J
+b111 N
+b110 R
+1K
+b11 P
+b111 (
+b111 .
+b111 *
+b111 -
+b110 /
+b100 U
+b100 [
+b11 b
+b100 I
+b100 M
+b11 Q
+b11 V
+b11 \
+b10 c
