@@ -144,7 +144,7 @@ module AluDecoder(AluControl, AluOP, funct);
             6'b100100 : AluControl <= 3'b000;
             6'b100101 : AluControl <= 3'b010;
             6'b101010 : AluControl <= 3'b011;
-        default: AluControl <=3'b0;
+        default: AluControl <=3'bxxx;
         endcase
 endmodule
 
@@ -182,4 +182,46 @@ module mux_4_32b(out, sel, D0, D1, D2, D3);
 endmodule
 
 
+
+
+//The main decoder for the system. Seperate from ALU decoder. This can be
+//viewed as the microcode of the system for each instruction. 
+module mainDecoder(MemWrite, RegWrite, RegDst, ALUSrc, MemtoReg, Branch, ALUOp, Jump, Opcode);
+
+    output MemWrite, RegWrite, RegDst, ALUSrc, MemtoReg, Branch, Jump;
+    output [1:0] ALUOp;
+    input [5:0] Opcode;
+
+    reg [8:0] controls;
+
+    assign {RegWrite,RegDst,ALUSrc,Branch,MemWrite,MemtoReg,ALUOp,Jump}=controls;
+    always @(*)
+        if(Opcode==6'b000000) assign controls=9'b110000100;
+        else if(Opcode==6'b100011) assign controls=9'b101001000;           
+        else if (Opcode==6'b101011) assign controls=9'b0x101x000;
+        else if (Opcode==6'b0001000) assign controls=9'b0x010x010;
+        else if (Opcode==6'b001000) assign controls=9'b101000000;
+        else if (Opcode==6'b000010) assign controls=9'b0xxx0xxx1;
+        else assign controls=9'bxxxxxxxxx;
+endmodule
+
+
+
+
+//make alu
+//make datapath
+
+
+
+//make main dec
+//controller involves alu dec and main dec
+
+
+//mips core involves data path and control path
+
+
+
+
+//                  control path           data path
+//heirachy goes (alu dec + main dec) + (alu(s) + pc + registers) = mips core
 
