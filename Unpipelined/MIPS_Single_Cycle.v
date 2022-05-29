@@ -3,7 +3,7 @@
 module MIPS_Single_Cycle();
 
     initial begin
-        $display("test hello test");
+
     end
 endmodule
 
@@ -60,7 +60,7 @@ module instruction_memory(RD, A);
     
     initial 
         begin 
-        $readmemh("dissassembled.dat",ram); //read dissassembled MIPS code and load it into ram
+        //$readmemh("dissassembled.dat",ram); //read dissassembled MIPS code and load it into ram
     end
 
     assign RD = ram[A]; //output onto bus. no need for clock because ram is asynchronous
@@ -162,7 +162,7 @@ endmodule
 
 module mux_2_32b(out, sel, D0, D1);
 
-    output reg [31:0] out;
+    output [31:0] out;
     input sel;
     input [31:0] D0, D1;
     
@@ -173,7 +173,7 @@ endmodule
 
 module mux_4_32b(out, sel, D0, D1, D2, D3);
 
-    output reg [31:0] out;
+    output [31:0] out;
     input [1:0]sel;
     input [31:0] D0, D1, D2, D3;
     
@@ -199,7 +199,7 @@ module mainDecoder(MemWrite, RegWrite, RegDst, ALUSrc, MemtoReg, Branch, ALUOp, 
         if(Opcode==6'b000000) assign controls=9'b110000100;
         else if(Opcode==6'b100011) assign controls=9'b101001000;           
         else if (Opcode==6'b101011) assign controls=9'b0x101x000;
-        else if (Opcode==6'b0001000) assign controls=9'b0x010x010;
+        else if (Opcode==6'b000100) assign controls=9'b0x010x010;
         else if (Opcode==6'b001000) assign controls=9'b101000000;
         else if (Opcode==6'b000010) assign controls=9'b0xxx0xxx1;
         else assign controls=9'bxxxxxxxxx;
