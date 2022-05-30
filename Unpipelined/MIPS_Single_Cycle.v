@@ -106,12 +106,14 @@ module SignExtender(extend, extended);
 
 endmodule
 
-module adder(Y,SrcA, SrcB);
+module adder(Y, C_out, SrcA, SrcB);
 
     output [31:0] Y;
+    output C_out;
     input [31:0] SrcA, SrcB;
     
-    assign Y=SrcA+SrcB;
+
+    assign {C_out,Y}=SrcA+SrcB;
 
 
 endmodule
@@ -139,26 +141,83 @@ module AluDecoder(AluControl, AluOP, funct);
         if (AluOP==2'b0x) AluControl<=3'b010;
         else if (AluOP==2'bx1) AluControl <=3'b110;
         else if(AluOP==2'b1x) case(funct)
-            6'b100000 : AluControl <= 3'b010;
-            6'b100010 : AluControl <= 3'b110;
-            6'b100100 : AluControl <= 3'b000;
-            6'b100101 : AluControl <= 3'b010;
-            6'b101010 : AluControl <= 3'b011;
-        default: AluControl <=3'bxxx;
+            6'b100000 : AluControl <= 3'b010;   //add
+            6'b100010 : AluControl <= 3'b110;   //sub
+            6'b100100 : AluControl <= 3'b000;   //and
+            6'b100101 : AluControl <= 3'b010;   //or
+            6'b101010 : AluControl <= 3'b011;   //slt
+        default: AluControl <=3'bxxx;   //illegal opcode
         endcase
 endmodule
 
 
-
-module sl2(Y, A); //shift left x2 
+module Or(Y, SrcA,SrcB);
 
     output [31:0] Y;
-    input [31:0] A;
+    input [31:0] SrcA, SrcB;
 
-    assign Y= {A[29:0],2'b00};
 
+    assign Y=SrcA | SrcB;
 
 endmodule
+
+module And(Y, SrcA,SrcB);
+
+    output [31:0] Y;
+    input [31:0] SrcA, SrcB;
+
+
+    assign Y=SrcA & SrcB;
+
+endmodule
+//subtract and add are done the same exact way. the only difference is that 
+//subtract is compiled as the addition of a twos complement number to
+//a posative number
+module ALU(Zero, ALUResult, C_out, ALUControl, SrcA, SrcB);
+
+    output reg Zero;
+    output [31:0] ALUResult;
+    output C_out;
+    input [2:0] ALUControl;
+    input [31:0] SrcA, SrcB;
+    
+    wire [31:0] SrcB_not; not(SrcB_not, SrcB);
+    wire [31:0] mux1_out;
+    wire [31:0] N0,N1,N2,N3;
+
+
+    mux_2_32b mux1(mux1_out,ALUControl[2], SrcB,SrcB_not);
+ 
+    and(N0,mux1_out,SrcA);
+    or(N1,mux1_out,SrcA);
+    
+    adder add1(N2,C_out,mux1_out,SrcA);
+    assign N3={1'b0,N2[30:0]};
+
+    mux_4_32b mux2(ALUResult,ALUControl[1:0],N0,N1,N2,N3);
+
+    always @(*)
+        if (ALUResult==0) Zero=1;
+        else Zero=0;
+
+endmodule
+
+
+
+
+
+
+
+
+module shift_left_2(shifted_out,shift_in);
+
+    input [31:0] shift_in;
+    output [31:0] shifted_out;
+
+
+    assign shifted_out=shift_in<<2;
+endmodule
+
 
 module mux_2_32b(out, sel, D0, D1);
 
@@ -187,7 +246,6 @@ endmodule
 //The main decoder for the system. Seperate from ALU decoder. This can be
 //viewed as the microcode of the system for each instruction. 
 module mainDecoder(MemWrite, RegWrite, RegDst, ALUSrc, MemtoReg, Branch, ALUOp, Jump, Opcode);
-
     output MemWrite, RegWrite, RegDst, ALUSrc, MemtoReg, Branch, Jump;
     output [1:0] ALUOp;
     input [5:0] Opcode;
@@ -208,12 +266,17 @@ endmodule
 
 
 
+
+
+
+
+
 //make alu
 //make datapath
 
 
 
-//make main dec
+
 //controller involves alu dec and main dec
 
 

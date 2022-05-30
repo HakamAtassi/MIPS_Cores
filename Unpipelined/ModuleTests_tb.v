@@ -253,12 +253,12 @@ module mainDecoder_tb;
 
 
     initial begin
-        Opcode<=6'b000000; #10; //R-type
-        Opcode<=6'b100011; #10; //lw
-        Opcode<=6'b101011; #10; //sw
-        Opcode<=6'b000100; #10; //beq
-        Opcode<=6'b001000; #10; //addi
-        Opcode<=6'b000010; #10; //j
+        Opcode=6'b000000; #10; //R-type
+        Opcode=6'b100011; #10; //lw
+        Opcode=6'b101011; #10; //sw
+        Opcode=6'b000100; #10; //beq
+        Opcode=6'b001000; #10; //addi
+        Opcode=6'b000010; #10; //j
     end
 
 
@@ -291,10 +291,94 @@ module mainDecoder_tb;
 
 
     initial begin
-        
         $display("mainDecoder tests complete. %d errors \n=======\n",errors);
     end
 
 
 
 endmodule
+
+
+
+
+module shift_left_2_tb;
+
+    reg [31:0] in;
+    wire [31:0] out;
+
+    integer errors=0;
+    
+
+
+    initial begin
+        $dumpfile("shift_left_2_tb.vcd");
+        $dumpvars;
+        $display("Shift left 2 test starting...");
+    end
+
+    shift_left_2 dut(out,in);
+
+    initial begin
+        for(integer i=0;i<1000;i++) begin
+            assign in=i; #10;
+        end
+    end
+
+    initial begin 
+        if(out!=in*4) $display("Error. Expected %X got %X",4*in, out);
+    end
+
+    initial begin
+        $display("shift_left_2 done");
+    end
+
+endmodule
+
+
+
+module adder_tb;
+
+    reg [31:0] SrcA, SrcB;
+    wire [31:0] out;
+
+    integer errors=0;
+    
+
+
+    initial begin
+        $dumpfile("adder.vcd");
+        $dumpvars;
+        $display("Adder test starting...");
+
+    end
+
+    adder dut(out, SrcA, SrcB);
+
+
+    initial begin 
+        for(integer i=0;i<1000;i++) begin
+            assign SrcA=i; #10;
+        end
+    end
+ 
+    initial begin
+        for(integer j=0;j<1000;j++) begin
+            assign SrcB=j; #20;
+        end
+    end
+
+
+    initial begin 
+        if(out!=SrcA+SrcB) $display("Error. Expected %X got %X",SrcA+SrcB, out);
+    end
+
+    initial begin
+        $display("Adder done");
+    end
+
+endmodule
+
+
+
+
+
