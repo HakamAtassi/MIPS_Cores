@@ -144,7 +144,7 @@ module AluDecoder(AluControl, AluOP, funct);
             6'b100000 : AluControl <= 3'b010;   //add
             6'b100010 : AluControl <= 3'b110;   //sub
             6'b100100 : AluControl <= 3'b000;   //and
-            6'b100101 : AluControl <= 3'b010;   //or
+            6'b100101 : AluControl <= 3'b001;   //or
             6'b101010 : AluControl <= 3'b011;   //slt
         default: AluControl <=3'bxxx;   //illegal opcode
         endcase
@@ -172,7 +172,7 @@ module And(Y, SrcA,SrcB);
 endmodule
 //subtract and add are done the same exact way. the only difference is that 
 //subtract is compiled as the addition of a twos complement number to
-//a posative number
+//a posative 
 module ALU(Zero, ALUResult, C_out, ALUControl, SrcA, SrcB);
 
     output reg Zero;
@@ -264,27 +264,139 @@ module mainDecoder(MemWrite, RegWrite, RegDst, ALUSrc, MemtoReg, Branch, ALUOp, 
 endmodule
 
 
+module controller (ALUControl, PCSrc, MemtoReg,ALUSrc,RegDst,RegWrite, MemWrite, Opcode, Funct, Zero, Jump);
+
+    
+    output [2:0] ALUControl;
+    output PCSrc, MemtoReg, ALUSrc, RegDst, RegWrite, MemWrite,Jump;
+
+    input [5:0] Funct;
+    input [5:0] Opcode;
+    input Zero;
+    
+    wire Branch;
+    wire [1:0] ALUOp;
+
+    mainDecoder md1(MemWrite, RegWrite, RegDst, ALUSrc, MemtoReg, Branch, ALUOp, Jump, Opcode);
+
+    AluDecoder aludec1(ALUControl, ALUOp,Funct);
+
+    assign PCSrc=Branch & Zero; //source of pc.
+
+
+endmodule
+
+
+
+module datapath(ALUOut, WriteData, PC, Zero, Reset, Clk, ALUControl, PCSrc, MemtoReg, ALUSrc, RegDst, RegWrite, Jump, ReadData,Instr);
+
+    output Zero; //zero flag if alu output is 0
+    output [31:0] PC; //program counter output after selection (final PC for instruction retrieving)
+    output [31:0] ALUOut, WriteData;
+    
+    input Reset, Clk, MemtoReg, PCSrc, ALUSrc, RegDst, RegWrite, Jump;
+    input [2:0] ALUControl; 
+    input [31:0] ReadData; //inputs datat to datapath
+    input [31:0] Instr;
+
+    wire [4:0] RegisterAddress; //address if writing to registers (A3)
+    
+    
+    wire [31:0] PCNext, PCNextbr, PCPlus4, PCBranch; 
+    //PCPLUS4 is the output of the ALU after adding 4
+    //PCBranch is the PC value after a branch instruction (which uses relative addressing)
+    //PCNextbr is the output of the mux after selecting between branching and just adding 4
+    
+    //PCNext is the value of the PC that is stored in the PC regitser
+
+    wire [31:0] SignImm, SignImmSh;
+    //a branch may be posative or negative. Since the PC is 32 bits and the
+    //largest possible relative address is 16 bits, it must be extended to 32
+    //bits with the correct sign in mind. 
+    //SignImm is the unextended branch value (relative address) and SignImmSh
+    //is the sign extended relative address inputted to the PC ALU
+
+    wire [31:0] SrcA, SrcB; 
+    //inputs to the main ALU
+
+    wire [31:0] Result;
+    //This is not the alu resut, it is the output of the mux that selects
+    //between data memory outout and aluoutput. This is imporatnt as it
+    //determines what is written to the register file
+    
+
+    Dflipflop PCRegister(PC,Clk, PCNext, Reset);
+    //PCRegister
+
+
+    adder pcadd1(PCPlus4,,32'b100,PC); //the adder for the Program counter iteration
+
+    shift_left_2 immsh(SignImmSh,SignImm);
+    //shiftng for branch operatioms (multiply by 4)
+
+    adder pcadd2 (PCBranch,,SignImmSh,PCPlus4);
+    //the adder for branch operations. number of bytes+PC
+    
+    mux_2_32b pcbrmux(PCNextbr,PCSrc, PCPlus4, PCBranch);
+    //this mux determines if the pc should use the next address(PC+4) or the
+    //branched PC (PCBranch) address based on contrrol logic from main dec
+
+    mux_2_32b pcmux(PCNext, Jump,PCNextbr, {PCPlus4[31:28],Instr[25:0], 2'b00});
+
+
+
+    
+
+
+    //register file 
+    
+
+    registerFile rf(SrcA, WriteData,Instr[25:21],Instr[20:16],RegisterAddress,WriteData,Clk, RegWrite);
+
+    mux_2_5b A3Mux(RegisterAddress,RegDst,Instr[20:16],Instr[25:21]);
+
+    mux_2_32b WD3Mux(Result,MemtoReg,ALUOut, ReadData);
+
+    SignExtender se(Instr[15:0],SignImm);
+    //ALU
+    mux_2_32b SRCBmux (SrcB, ALUSrc, WriteData, SignImm);
+    
+    alu alu_main (Zero, ALUOut, , ALUControl,SrcA, SrcB);
 
 
 
 
+endmodule
+
+module mux_2_5b(out, sel, D0, D1); //for controlling A3
+
+    output [4:0] out;
+    input sel;
+    input [4:0] D0, D1;
+    
+    assign out=sel? D1:D0;
+
+endmodule
 
 
+module MIPS (ALUOut,WriteData,WE, PC,Instr,ReadData,Reset,Clk);
 
-//make alu
-//make datapath
+    output  WE; //write enable
+    output [31:0] ALUOut,WriteData;
+    output [31:0] PC;
+    input [31:0] Instr, ReadData;
+    input Reset,Clk;
+
+    wire MemToReg, Branch,ALUSrc, RegDst, RegWrite, Jump,PCSrc,Zero;
+    wire [2:0] ALUControl;
+    
+    controller control(ALUControl,PCSrc,MemToReg,ALUSrc,RegDst,RegWrite,WE,Instr[31:26],Instr[5:0],Zero,Jump);
 
 
+    datapath dp(ALUOut, WriteData, PC, Zero, Reset, Clk, ALUControl, PCSrc, MemToReg, ALUSrc, RegDst, RegWrite, Jump, ReadData,Instr);
 
 
-//controller involves alu dec and main dec
+endmodule
 
 
-//mips core involves data path and control path
-
-
-
-
-//                  control path           data path
-//heirachy goes (alu dec + main dec) + (alu(s) + pc + registers) = mips core
 
