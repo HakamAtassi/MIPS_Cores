@@ -56,14 +56,14 @@ module instruction_memory(RD, A);
     output [31:0] RD;    //output data is 32 bits wide because thats how long instructions are
     input [5:0] A;      //64 possible addresses
 
-    reg [31:0] ram [63:0]; //64 wires each 32 bits wide
+    reg [31:0] RAM [63:0]; //64 wires each 32 bits wide
     
-    initial 
+    initial
         begin 
-        //$readmemh("dissassembled.dat",ram); //read dissassembled MIPS code and load it into ram
+            $readmemh("memfile.dat",RAM); //read dissassembled MIPS code and load it into ram
     end
 
-    assign RD = ram[A]; //output onto bus. no need for clock because ram is asynchronous
+    assign RD = RAM[A]; //output onto bus. no need for clock because ram is asynchronous
 
 endmodule
 
@@ -181,16 +181,18 @@ module ALU(Zero, ALUResult, C_out, ALUControl, SrcA, SrcB);
     input [2:0] ALUControl;
     input [31:0] SrcA, SrcB;
     
-    wire [31:0] SrcB_not; not(SrcB_not, SrcB);
+    wire [31:0] SrcB_not; assign SrcB_not=~SrcB;
     wire [31:0] mux1_out;
     wire [31:0] N0,N1,N2,N3;
 
 
     mux_2_32b mux1(mux1_out,ALUControl[2], SrcB,SrcB_not);
  
-    and(N0,mux1_out,SrcA);
-    or(N1,mux1_out,SrcA);
-    
+    assign N0=mux1_out&SrcA;
+
+    assign N1=mux1_out&SrcA;
+
+
     adder add1(N2,C_out,mux1_out,SrcA);
     assign N3={1'b0,N2[30:0]};
 
@@ -361,7 +363,7 @@ module datapath(ALUOut, WriteData, PC, Zero, Reset, Clk, ALUControl, PCSrc, Memt
     //ALU
     mux_2_32b SRCBmux (SrcB, ALUSrc, WriteData, SignImm);
     
-    alu alu_main (Zero, ALUOut, , ALUControl,SrcA, SrcB);
+    ALU alu_main (Zero, ALUOut, , ALUControl,SrcA, SrcB);
 
 
 
@@ -399,4 +401,21 @@ module MIPS (ALUOut,WriteData,WE, PC,Instr,ReadData,Reset,Clk);
 endmodule
 
 
+module top(Clk, Reset, WriteData,DataAdr,WE);
 
+    input Clk, Reset;
+    output [31:0] WriteData, DataAdr;
+    output WE;
+
+
+    wire [31:0] PC, Instr, ReadData;
+
+
+    MIPS mips(DataAdr,WriteData,WE, PC,Instr,ReadData,Reset,Clk);
+
+
+    instruction_memory imem(Instr,PC[7:2]);
+
+    data_memory dmem(ReadData, Clk, DataAdr, WriteData, WE);
+
+endmodule
