@@ -352,7 +352,7 @@ module adder_tb;
 
     end
 
-    adder dut(out, SrcA, SrcB);
+    adder dut(out,,0,SrcA, SrcB);
 
 
     initial begin 

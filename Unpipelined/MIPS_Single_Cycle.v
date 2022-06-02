@@ -15,12 +15,9 @@ module Dflipflop(Q, clk, D, reset);
     input [31:0] D;
     output reg [31:0] Q;
 
-    always @ (posedge clk)
-        begin
-            if(reset==1) Q<=0;
-
-            Q<=D; //output new pc from alu on posedge clk 
-        end
+    always @ (posedge clk,posedge reset)
+        if(reset==1) Q<=0;
+        else Q<=D; //output new pc from alu on posedge clk 
 endmodule
 
 
@@ -106,14 +103,15 @@ module SignExtender(extend, extended);
 
 endmodule
 
-module adder(Y, C_out, SrcA, SrcB);
+module adder(Y,C_out,C_in,SrcA, SrcB);
 
     output [31:0] Y;
     output C_out;
     input [31:0] SrcA, SrcB;
+    input C_in;
     
 
-    assign {C_out,Y}=SrcA+SrcB;
+    assign {C_out,Y}=SrcA+SrcB+C_in;
 
 
 endmodule
@@ -136,6 +134,21 @@ module AluDecoder(AluControl, AluOP, funct);
     input [5:0] funct;
     
 
+    always @ (*)
+        case (AluOP)
+            2'b00: AluControl <=3'b010;
+            2'b01: AluControl <=3'b110;
+            default: case(funct)
+                6'b100000 : AluControl <= 3'b010;   //add
+                6'b100010 : AluControl <= 3'b110;   //sub
+                6'b100100 : AluControl <= 3'b000;   //and
+                6'b100101 : AluControl <= 3'b001;   //or
+                6'b101010 : AluControl <= 3'b111;   //slt
+                default: AluControl <=3'bxxx;
+            endcase
+        endcase
+endmodule
+/*
 
     always @(*)
         if (AluOP==2'b0x) AluControl<=3'b010;
@@ -145,11 +158,11 @@ module AluDecoder(AluControl, AluOP, funct);
             6'b100010 : AluControl <= 3'b110;   //sub
             6'b100100 : AluControl <= 3'b000;   //and
             6'b100101 : AluControl <= 3'b001;   //or
-            6'b101010 : AluControl <= 3'b011;   //slt
+            6'b101010 : AluControl <= 3'b111;   //slt
         default: AluControl <=3'bxxx;   //illegal opcode
         endcase
 endmodule
-
+*/
 
 module Or(Y, SrcA,SrcB);
 
@@ -193,14 +206,17 @@ module ALU(Zero, ALUResult, C_out, ALUControl, SrcA, SrcB);
     assign N1=mux1_out&SrcA;
 
 
-    adder add1(N2,C_out,mux1_out,SrcA);
+    adder add1(N2,C_out,ALUControl[2],mux1_out,SrcA);
     assign N3={1'b0,N2[30:0]};
 
     mux_4_32b mux2(ALUResult,ALUControl[1:0],N0,N1,N2,N3);
 
+
+
+
     always @(*)
-        if (ALUResult==0) Zero=1;
-        else Zero=0;
+        if (ALUResult==0) Zero<=1;
+        else Zero<=0;
 
 endmodule
 
@@ -254,16 +270,20 @@ module mainDecoder(MemWrite, RegWrite, RegDst, ALUSrc, MemtoReg, Branch, ALUOp, 
 
     reg [8:0] controls;
 
+
     assign {RegWrite,RegDst,ALUSrc,Branch,MemWrite,MemtoReg,ALUOp,Jump}=controls;
+
     always @(*)
-        if(Opcode==6'b000000) assign controls=9'b110000100;
-        else if(Opcode==6'b100011) assign controls=9'b101001000;           
-        else if (Opcode==6'b101011) assign controls=9'b0x101x000;
-        else if (Opcode==6'b000100) assign controls=9'b0x010x010;
-        else if (Opcode==6'b001000) assign controls=9'b101000000;
-        else if (Opcode==6'b000010) assign controls=9'b0xxx0xxx1;
-        else assign controls=9'bxxxxxxxxx;
+        if(Opcode==6'b000000) controls<=9'b110000010;
+        else if(Opcode==6'b100011) controls<=9'b101001000;           
+        else if (Opcode==6'b101011) controls<=9'b001010000;
+        else if (Opcode==6'b000100) controls<=9'b000100001;
+        else if (Opcode==6'b001000) controls<=9'b101000000;
+        else if (Opcode==6'b000010) controls<=9'b000000100;
+        else controls<=9'bxxxxxxxxx;
 endmodule
+
+
 
 
 module controller (ALUControl, PCSrc, MemtoReg,ALUSrc,RegDst,RegWrite, MemWrite, Opcode, Funct, Zero, Jump);
@@ -283,7 +303,8 @@ module controller (ALUControl, PCSrc, MemtoReg,ALUSrc,RegDst,RegWrite, MemWrite,
 
     AluDecoder aludec1(ALUControl, ALUOp,Funct);
 
-    assign PCSrc=Branch & Zero; //source of pc.
+    
+    assign PCSrc=Branch & Zero; //source of pc. //PCSRC IS NOT UPDATING
 
 
 endmodule
@@ -331,15 +352,15 @@ module datapath(ALUOut, WriteData, PC, Zero, Reset, Clk, ALUControl, PCSrc, Memt
     //PCRegister
 
 
-    adder pcadd1(PCPlus4,,32'b100,PC); //the adder for the Program counter iteration
+    adder pcadd1(PCPlus4,,0,32'b100,PC); //the adder for the Program counter iteration
 
     shift_left_2 immsh(SignImmSh,SignImm);
     //shiftng for branch operatioms (multiply by 4)
 
-    adder pcadd2 (PCBranch,,SignImmSh,PCPlus4);
+    adder pcadd2 (PCBranch,,0,SignImmSh,PCPlus4);
     //the adder for branch operations. number of bytes+PC
     
-    mux_2_32b pcbrmux(PCNextbr,PCSrc, PCPlus4, PCBranch);
+    mux_2_32b pcbrmux(PCNextbr,PCSrc, PCPlus4, PCBranch);                                        //this module is faulty
     //this mux determines if the pc should use the next address(PC+4) or the
     //branched PC (PCBranch) address based on contrrol logic from main dec
 
@@ -411,11 +432,11 @@ module top(Clk, Reset, WriteData,DataAdr,WE);
     wire [31:0] PC, Instr, ReadData;
 
 
-    MIPS mips(DataAdr,WriteData,WE, PC,Instr,ReadData,Reset,Clk);
+    MIPS mips(DataAdr,WriteData,WE,PC,Instr,ReadData,Reset,Clk);
 
 
     instruction_memory imem(Instr,PC[7:2]);
-
+    
     data_memory dmem(ReadData, Clk, DataAdr, WriteData, WE);
 
 endmodule
