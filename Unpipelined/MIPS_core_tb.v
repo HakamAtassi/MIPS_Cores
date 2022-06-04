@@ -20,13 +20,17 @@ module testbench;
 
 
 
+
+
+
     initial
         begin
             reset <= 1; # 22; reset <=0;
         end
+
+
 // generate clock to sequence tests
-    initial
-        for(integer i=0;i<1000;i++) begin
+    always begin
             clk <=1; # 5; clk <=0; # 5;
             
         end

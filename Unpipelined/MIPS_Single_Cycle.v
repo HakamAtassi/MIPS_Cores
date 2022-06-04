@@ -1,11 +1,5 @@
 //on reset PC should begin at 0xBFC0 0000
 
-module MIPS_Single_Cycle();
-
-    initial begin
-
-    end
-endmodule
 
 
 //32 bit flip flop with active high reset 
@@ -39,9 +33,9 @@ module registerFile(RD1, RD2, A1, A2, A3, WD3, clk, WE3);
         always @ (posedge clk) 
             if (WE3==1) internal_mem[A3]<=WD3;
         
-        assign RD1[0]=0;    //register 0 is always 0
-        assign RD1=internal_mem[A1];
-        assign RD2=internal_mem[A2];
+
+    assign RD1 = (A1 !=0) ? internal_mem[A1] :0;
+    assign RD2 = (A2 !=0) ? internal_mem[A2] :0;
 
 endmodule
 
@@ -78,7 +72,7 @@ module data_memory(RD,clk,A,WD,WE);
     //                                                                                                                      CHECK
     //                                                                                                                      THIS
     //                                                                                                                      MODULE
-    output [31:0] RD;
+    output reg [31:0] RD;
     input clk, WE;
     input [31:0] A,WD;
 
@@ -86,10 +80,19 @@ module data_memory(RD,clk,A,WD,WE);
     reg [31:0] data [63:0];
 
 
-    assign RD = data[A]; //address is always being read out
+//    assign RD = data[A[31:2]]; //address is always being read out
+
+  //  always @ (posedge clk)
+    //    if(WE==1) data[A[31:2]] <=WD;
+
+    always @(*) begin
+       RD <= data[A]; //address is always being read out
+    end
+
 
     always @ (posedge clk)
-        if(WE==1) data[A] <=WD;
+        if(WE==1) data[A[31:2]] <=WD;
+
 endmodule
 
 
@@ -188,7 +191,7 @@ endmodule
 //a posative 
 module ALU(Zero, ALUResult, C_out, ALUControl, SrcA, SrcB);
 
-    output reg Zero;
+    output Zero;
     output [31:0] ALUResult;
     output C_out;
     input [2:0] ALUControl;
@@ -212,11 +215,7 @@ module ALU(Zero, ALUResult, C_out, ALUControl, SrcA, SrcB);
     mux_4_32b mux2(ALUResult,ALUControl[1:0],N0,N1,N2,N3);
 
 
-
-
-    always @(*)
-        if (ALUResult==0) Zero<=1;
-        else Zero<=0;
+    assign Zero = (ALUResult==0) ?   1 :0;
 
 endmodule
 
@@ -304,7 +303,7 @@ module controller (ALUControl, PCSrc, MemtoReg,ALUSrc,RegDst,RegWrite, MemWrite,
     AluDecoder aludec1(ALUControl, ALUOp,Funct);
 
     
-    assign PCSrc=Branch & Zero; //source of pc. //PCSRC IS NOT UPDATING
+    assign PCSrc=Branch & Zero; //source of pc. /\
 
 
 endmodule
@@ -352,12 +351,12 @@ module datapath(ALUOut, WriteData, PC, Zero, Reset, Clk, ALUControl, PCSrc, Memt
     //PCRegister
 
 
-    adder pcadd1(PCPlus4,,0,32'b100,PC); //the adder for the Program counter iteration
+    adder pcadd1(PCPlus4,,1'b0,32'b100,PC); //the adder for the Program counter iteration
 
     shift_left_2 immsh(SignImmSh,SignImm);
     //shiftng for branch operatioms (multiply by 4)
 
-    adder pcadd2 (PCBranch,,0,SignImmSh,PCPlus4);
+    adder pcadd2 (PCBranch,,1'b0,SignImmSh,PCPlus4);
     //the adder for branch operations. number of bytes+PC
     
     mux_2_32b pcbrmux(PCNextbr,PCSrc, PCPlus4, PCBranch);                                        //this module is faulty
@@ -371,11 +370,13 @@ module datapath(ALUOut, WriteData, PC, Zero, Reset, Clk, ALUControl, PCSrc, Memt
     
 
 
-    //register file 
+    //register file  //ERROR WITH WriteData
     
+    //registerFile(RD1, RD2, A1, A2, A3, WD3, clk, WE3);
+    registerFile rf(SrcA, WriteData,Instr[25:21],Instr[20:16],RegisterAddress,Result,Clk, RegWrite);        //ERROR HERE ERROR HERE ERROR HERE
 
-    registerFile rf(SrcA, WriteData,Instr[25:21],Instr[20:16],RegisterAddress,WriteData,Clk, RegWrite);
 
+    //mux_2_32b(out, sel, D0, D1); 
     mux_2_5b A3Mux(RegisterAddress,RegDst,Instr[20:16],Instr[25:21]);
 
     mux_2_32b WD3Mux(Result,MemtoReg,ALUOut, ReadData);
@@ -384,7 +385,9 @@ module datapath(ALUOut, WriteData, PC, Zero, Reset, Clk, ALUControl, PCSrc, Memt
     //ALU
     mux_2_32b SRCBmux (SrcB, ALUSrc, WriteData, SignImm);
     
-    ALU alu_main (Zero, ALUOut, , ALUControl,SrcA, SrcB);
+    wire C_out;
+
+    ALU alu_main (Zero, ALUOut,C_out,ALUControl,SrcA, SrcB);
 
 
 
@@ -413,9 +416,11 @@ module MIPS (ALUOut,WriteData,WE, PC,Instr,ReadData,Reset,Clk);
     wire MemToReg, Branch,ALUSrc, RegDst, RegWrite, Jump,PCSrc,Zero;
     wire [2:0] ALUControl;
     
+    //controller (ALUControl, PCSrc, MemtoReg,ALUSrc,RegDst,RegWrite, MemWrite, Opcode, Funct, Zero, Jump);
     controller control(ALUControl,PCSrc,MemToReg,ALUSrc,RegDst,RegWrite,WE,Instr[31:26],Instr[5:0],Zero,Jump);
 
 
+    //datapath(ALUOut, WriteData, PC, Zero, Reset, Clk, ALUControl, PCSrc, MemtoReg, ALUSrc, RegDst, RegWrite, Jump, ReadData,Instr);
     datapath dp(ALUOut, WriteData, PC, Zero, Reset, Clk, ALUControl, PCSrc, MemToReg, ALUSrc, RegDst, RegWrite, Jump, ReadData,Instr);
 
 
@@ -431,12 +436,15 @@ module top(Clk, Reset, WriteData,DataAdr,WE);
 
     wire [31:0] PC, Instr, ReadData;
 
-
+    //MIPS (ALUOut,WriteData,WE, PC,Instr,ReadData,Reset,Clk);
     MIPS mips(DataAdr,WriteData,WE,PC,Instr,ReadData,Reset,Clk);
 
-
+    //instruction_memory(RD, A);
     instruction_memory imem(Instr,PC[7:2]);
-    
+
+
+
+    //data_memory(RD,clk,A,WD,WE);    
     data_memory dmem(ReadData, Clk, DataAdr, WriteData, WE);
 
 endmodule

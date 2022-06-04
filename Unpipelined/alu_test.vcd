@@ -1,5 +1,5 @@
 $date
-	Thu Jun  2 00:56:55 2022
+	Sat Jun  4 15:05:12 2022
 $end
 $version
 	Icarus Verilog
@@ -34,11 +34,11 @@ $var wire 32 0 SrcA [31:0] $end
 $var wire 32 1 SrcB [31:0] $end
 $var wire 32 2 SrcB_not [31:0] $end
 $var wire 32 3 mux1_out [31:0] $end
+$var wire 1 ' Zero $end
 $var wire 32 4 N3 [31:0] $end
 $var wire 32 5 N2 [31:0] $end
 $var wire 1 ( C_out $end
 $var wire 32 6 ALUResult [31:0] $end
-$var reg 1 ' Zero $end
 $scope module add1 $end
 $var wire 1 7 C_in $end
 $var wire 32 8 SrcB [31:0] $end
@@ -189,11 +189,11 @@ $var wire 32 *" SrcA [31:0] $end
 $var wire 32 +" SrcB [31:0] $end
 $var wire 32 ," SrcB_not [31:0] $end
 $var wire 32 -" mux1_out [31:0] $end
+$var wire 1 T Zero $end
 $var wire 32 ." N3 [31:0] $end
 $var wire 32 /" N2 [31:0] $end
 $var wire 1 0" C_out $end
 $var wire 32 1" ALUResult [31:0] $end
-$var reg 1 T Zero $end
 $scope module add1 $end
 $var wire 1 2" C_in $end
 $var wire 32 3" SrcB [31:0] $end
@@ -381,36 +381,36 @@ xH
 bx G
 zF
 zE
-b1110 D
+b0 D
 b10 C
-b1110 B
-b1110 A
-b111 @
-b111 ?
-b111 >
-0=
+b0 B
+b0 A
+b0 @
+b0 ?
+b11111111111111111111111111111000 >
+1=
 b11111111111111111111111111111000 <
 b111 ;
-b111 :
-b1110 9
+b11111111111111111111111111111000 :
+b0 9
 b111 8
-07
-b1110 6
-b1110 5
-b1110 4
-b111 3
+17
+b0 6
+b0 5
+b0 4
+b11111111111111111111111111111000 3
 b11111111111111111111111111111000 2
 b111 1
 b111 0
-b111 /
-b111 .
-b10 -
+b0 /
+b0 .
+b110 -
 b111 ,
 b111 +
-b10 *
-b1110 )
-0(
-0'
+b110 *
+b0 )
+1(
+1'
 bx &
 bz %
 bz $
