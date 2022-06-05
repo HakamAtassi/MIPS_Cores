@@ -2,12 +2,12 @@
 `include "MIPS_Single_Cycle.v"
 
 module testbench;
-    reg clk=0;
-    reg reset=0;
+    reg clk;
+    reg reset;
     wire [31:0] writedata, dataadr;
-    wire WE;
+    wire memwrite;
 // instantiate device to be tested
-    top dut (clk, reset, writedata, dataadr, WE);
+    top dut (clk, reset, writedata, dataadr, memwrite);
 // initialize test
 
 
@@ -39,7 +39,7 @@ module testbench;
 // check results
     always @ (negedge clk)
         begin
-            if (WE) begin
+            if (memwrite) begin
                 if (dataadr === 84 & writedata === 7) begin
                     $display ("Simulation succeeded");
                     $stop;

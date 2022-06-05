@@ -1,5 +1,5 @@
 $date
-	Sat Jun  4 15:05:12 2022
+	Sun Jun  5 16:41:10 2022
 $end
 $version
 	Icarus Verilog
@@ -12,253 +12,264 @@ $var wire 32 ! SrcA [31:0] $end
 $var wire 32 " SrcB [31:0] $end
 $var wire 32 # Y [31:0] $end
 $upscope $end
-$scope module MIPS_Single_Cycle $end
+$scope module Dflipflop $end
+$var wire 1 $ Clk $end
+$var wire 32 % D [31:0] $end
+$var wire 1 & reset $end
+$var reg 32 ' Q [31:0] $end
 $upscope $end
 $scope module Or $end
-$var wire 32 $ SrcA [31:0] $end
-$var wire 32 % SrcB [31:0] $end
-$var wire 32 & Y [31:0] $end
+$var wire 32 ( SrcA [31:0] $end
+$var wire 32 ) SrcB [31:0] $end
+$var wire 32 * Y [31:0] $end
 $upscope $end
 $scope module alu_test $end
-$var wire 1 ' Zero $end
-$var wire 1 ( C_out $end
-$var wire 32 ) ALUResult [31:0] $end
-$var reg 3 * ALUControl [2:0] $end
-$var reg 32 + SrcA [31:0] $end
-$var reg 32 , SrcB [31:0] $end
+$var wire 1 + Zero $end
+$var wire 1 , C_out $end
+$var wire 32 - ALUResult [31:0] $end
+$var reg 3 . ALUControl [2:0] $end
+$var reg 32 / SrcA [31:0] $end
+$var reg 32 0 SrcB [31:0] $end
 $scope module dut $end
-$var wire 3 - ALUControl [2:0] $end
-$var wire 32 . N0 [31:0] $end
-$var wire 32 / N1 [31:0] $end
-$var wire 32 0 SrcA [31:0] $end
-$var wire 32 1 SrcB [31:0] $end
-$var wire 32 2 SrcB_not [31:0] $end
-$var wire 32 3 mux1_out [31:0] $end
-$var wire 1 ' Zero $end
-$var wire 32 4 N3 [31:0] $end
-$var wire 32 5 N2 [31:0] $end
-$var wire 1 ( C_out $end
-$var wire 32 6 ALUResult [31:0] $end
+$var wire 3 1 ALUControl [2:0] $end
+$var wire 32 2 N0 [31:0] $end
+$var wire 32 3 N1 [31:0] $end
+$var wire 32 4 SrcA [31:0] $end
+$var wire 32 5 SrcB [31:0] $end
+$var wire 32 6 SrcB_not [31:0] $end
+$var wire 32 7 mux1_out [31:0] $end
+$var wire 1 + Zero $end
+$var wire 32 8 N3 [31:0] $end
+$var wire 32 9 N2 [31:0] $end
+$var wire 1 , C_out $end
+$var wire 32 : ALUResult [31:0] $end
 $scope module add1 $end
-$var wire 1 7 C_in $end
-$var wire 32 8 SrcB [31:0] $end
-$var wire 32 9 Y [31:0] $end
-$var wire 32 : SrcA [31:0] $end
-$var wire 1 ( C_out $end
+$var wire 1 ; C_in $end
+$var wire 32 < SrcB [31:0] $end
+$var wire 32 = Y [31:0] $end
+$var wire 32 > SrcA [31:0] $end
+$var wire 1 , C_out $end
 $upscope $end
 $scope module mux1 $end
-$var wire 32 ; D0 [31:0] $end
-$var wire 32 < D1 [31:0] $end
-$var wire 1 = sel $end
-$var wire 32 > out [31:0] $end
-$upscope $end
-$scope module mux2 $end
 $var wire 32 ? D0 [31:0] $end
 $var wire 32 @ D1 [31:0] $end
-$var wire 32 A D2 [31:0] $end
-$var wire 32 B D3 [31:0] $end
-$var wire 2 C sel [1:0] $end
-$var wire 32 D out [31:0] $end
+$var wire 1 A sel $end
+$var wire 32 B out [31:0] $end
+$upscope $end
+$scope module mux2 $end
+$var wire 32 C D0 [31:0] $end
+$var wire 32 D D1 [31:0] $end
+$var wire 32 E D2 [31:0] $end
+$var wire 32 F D3 [31:0] $end
+$var wire 2 G sel [1:0] $end
+$var wire 32 H out [31:0] $end
 $upscope $end
 $upscope $end
+$upscope $end
+$scope module mux_2_5b $end
+$var wire 5 I D0 [4:0] $end
+$var wire 5 J D1 [4:0] $end
+$var wire 1 K sel $end
+$var wire 5 L out [4:0] $end
 $upscope $end
 $scope module top $end
-$var wire 1 E Clk $end
-$var wire 1 F Reset $end
-$var wire 32 G WriteData [31:0] $end
-$var wire 1 H WE $end
-$var wire 32 I ReadData [31:0] $end
-$var wire 32 J PC [31:0] $end
-$var wire 32 K Instr [31:0] $end
-$var wire 32 L DataAdr [31:0] $end
+$var wire 1 M Clk $end
+$var wire 1 N Reset $end
+$var wire 32 O WriteData [31:0] $end
+$var wire 32 P ReadData [31:0] $end
+$var wire 32 Q PC [31:0] $end
+$var wire 1 R MemWrite $end
+$var wire 32 S Instr [31:0] $end
+$var wire 32 T DataAdr [31:0] $end
 $scope module dmem $end
-$var wire 32 M RD [31:0] $end
-$var wire 1 E clk $end
-$var wire 1 H WE $end
-$var wire 32 N WD [31:0] $end
-$var wire 32 O A [31:0] $end
+$var wire 1 M Clk $end
+$var wire 1 R WE $end
+$var wire 32 U WD [31:0] $end
+$var wire 32 V A [31:0] $end
+$var reg 32 W RD [31:0] $end
 $upscope $end
 $scope module imem $end
-$var wire 6 P A [5:0] $end
-$var wire 32 Q RD [31:0] $end
+$var wire 6 X A [5:0] $end
+$var wire 32 Y RD [31:0] $end
 $upscope $end
 $scope module mips $end
-$var wire 1 E Clk $end
-$var wire 32 R Instr [31:0] $end
-$var wire 32 S ReadData [31:0] $end
-$var wire 1 F Reset $end
-$var wire 1 T Zero $end
-$var wire 32 U WriteData [31:0] $end
-$var wire 1 H WE $end
-$var wire 1 V RegWrite $end
-$var wire 1 W RegDst $end
-$var wire 1 X PCSrc $end
-$var wire 32 Y PC [31:0] $end
-$var wire 1 Z MemToReg $end
-$var wire 1 [ Jump $end
-$var wire 1 \ ALUSrc $end
-$var wire 32 ] ALUOut [31:0] $end
-$var wire 3 ^ ALUControl [2:0] $end
+$var wire 1 M Clk $end
+$var wire 32 Z Instr [31:0] $end
+$var wire 32 [ ReadData [31:0] $end
+$var wire 1 N reset $end
+$var wire 32 \ writedata [31:0] $end
+$var wire 1 R memwrite $end
+$var wire 1 ] Zero $end
+$var wire 1 ^ RegWrite $end
+$var wire 1 _ RegDst $end
+$var wire 1 ` PCSrc $end
+$var wire 32 a PC [31:0] $end
+$var wire 1 b MemtoReg $end
+$var wire 1 c Jump $end
+$var wire 1 d ALUSrc $end
+$var wire 32 e ALUOut [31:0] $end
+$var wire 3 f ALUControl [2:0] $end
 $scope module control $end
-$var wire 6 _ Funct [5:0] $end
-$var wire 6 ` Opcode [5:0] $end
-$var wire 1 X PCSrc $end
-$var wire 1 T Zero $end
-$var wire 1 V RegWrite $end
-$var wire 1 W RegDst $end
-$var wire 1 Z MemtoReg $end
-$var wire 1 H MemWrite $end
-$var wire 1 [ Jump $end
-$var wire 1 a Branch $end
-$var wire 1 \ ALUSrc $end
-$var wire 2 b ALUOp [1:0] $end
-$var wire 3 c ALUControl [2:0] $end
+$var wire 6 g Funct [5:0] $end
+$var wire 6 h Opcode [5:0] $end
+$var wire 1 ` PCSrc $end
+$var wire 1 ] Zero $end
+$var wire 1 ^ RegWrite $end
+$var wire 1 _ RegDst $end
+$var wire 1 b MemtoReg $end
+$var wire 1 R MemWrite $end
+$var wire 1 c Jump $end
+$var wire 1 i Branch $end
+$var wire 1 d ALUSrc $end
+$var wire 2 j ALUOp [1:0] $end
+$var wire 3 k ALUControl [2:0] $end
 $scope module aludec1 $end
-$var wire 6 d funct [5:0] $end
-$var wire 2 e AluOP [1:0] $end
-$var reg 3 f AluControl [2:0] $end
+$var wire 6 l Funct [5:0] $end
+$var wire 2 m AluOP [1:0] $end
+$var reg 3 n ALUControl [2:0] $end
 $upscope $end
 $scope module md1 $end
-$var wire 6 g Opcode [5:0] $end
-$var wire 1 V RegWrite $end
-$var wire 1 W RegDst $end
-$var wire 1 Z MemtoReg $end
-$var wire 1 H MemWrite $end
-$var wire 1 [ Jump $end
-$var wire 1 a Branch $end
-$var wire 1 \ ALUSrc $end
-$var wire 2 h ALUOp [1:0] $end
-$var reg 9 i controls [8:0] $end
+$var wire 6 o Opcode [5:0] $end
+$var wire 1 ^ RegWrite $end
+$var wire 1 _ RegDst $end
+$var wire 1 b MemtoReg $end
+$var wire 1 R MemWrite $end
+$var wire 1 c Jump $end
+$var wire 1 i Branch $end
+$var wire 1 d ALUSrc $end
+$var wire 2 p ALUOp [1:0] $end
+$var reg 9 q controls [8:0] $end
 $upscope $end
 $upscope $end
 $scope module dp $end
-$var wire 3 j ALUControl [2:0] $end
-$var wire 1 \ ALUSrc $end
-$var wire 1 E Clk $end
-$var wire 32 k Instr [31:0] $end
-$var wire 1 [ Jump $end
-$var wire 1 Z MemtoReg $end
-$var wire 1 X PCSrc $end
-$var wire 32 l ReadData [31:0] $end
-$var wire 1 W RegDst $end
-$var wire 1 V RegWrite $end
-$var wire 1 F Reset $end
-$var wire 32 m SrcA [31:0] $end
-$var wire 1 T Zero $end
-$var wire 32 n WriteData [31:0] $end
-$var wire 32 o SrcB [31:0] $end
-$var wire 32 p SignImmSh [31:0] $end
-$var wire 32 q SignImm [31:0] $end
-$var wire 32 r Result [31:0] $end
-$var wire 5 s RegisterAddress [4:0] $end
-$var wire 32 t PCPlus4 [31:0] $end
-$var wire 32 u PCNextbr [31:0] $end
-$var wire 32 v PCNext [31:0] $end
-$var wire 32 w PCBranch [31:0] $end
-$var wire 32 x PC [31:0] $end
-$var wire 32 y ALUOut [31:0] $end
-$scope module A3Mux $end
-$var wire 5 z D0 [4:0] $end
-$var wire 5 { D1 [4:0] $end
-$var wire 1 W sel $end
-$var wire 5 | out [4:0] $end
-$upscope $end
+$var wire 3 r ALUControl [2:0] $end
+$var wire 1 d ALUSrc $end
+$var wire 1 M Clk $end
+$var wire 32 s Instr [31:0] $end
+$var wire 1 c Jump $end
+$var wire 1 b MemtoReg $end
+$var wire 1 ` PCSrc $end
+$var wire 32 t ReadData [31:0] $end
+$var wire 1 _ RegDst $end
+$var wire 1 ^ RegWrite $end
+$var wire 1 N Reset $end
+$var wire 1 ] Zero $end
+$var wire 5 u WriteReg [4:0] $end
+$var wire 32 v WriteData [31:0] $end
+$var wire 32 w SrcB [31:0] $end
+$var wire 32 x SrcA [31:0] $end
+$var wire 32 y SignImmSh [31:0] $end
+$var wire 32 z SignImm [31:0] $end
+$var wire 32 { Result [31:0] $end
+$var wire 32 | PCPlus4 [31:0] $end
+$var wire 32 } PCNextbr [31:0] $end
+$var wire 32 ~ PCNext [31:0] $end
+$var wire 32 !" PCBranch [31:0] $end
+$var wire 32 "" PC [31:0] $end
+$var wire 1 #" C_out $end
+$var wire 32 $" ALUOut [31:0] $end
 $scope module PCRegister $end
-$var wire 1 E clk $end
-$var wire 1 F reset $end
-$var wire 32 } D [31:0] $end
-$var reg 32 ~ Q [31:0] $end
+$var wire 1 M Clk $end
+$var wire 1 N Reset $end
+$var wire 32 %" d [31:0] $end
+$var reg 32 &" q [31:0] $end
 $upscope $end
-$scope module SRCBmux $end
-$var wire 1 \ sel $end
-$var wire 32 !" out [31:0] $end
-$var wire 32 "" D1 [31:0] $end
-$var wire 32 #" D0 [31:0] $end
-$upscope $end
-$scope module WD3Mux $end
-$var wire 32 $" D1 [31:0] $end
-$var wire 1 Z sel $end
-$var wire 32 %" out [31:0] $end
-$var wire 32 &" D0 [31:0] $end
+$scope module SrcBmux $end
+$var wire 1 d s $end
+$var wire 32 '" y [31:0] $end
+$var wire 32 (" d1 [31:0] $end
+$var wire 32 )" d0 [31:0] $end
 $upscope $end
 $scope module alu_main $end
-$var wire 3 '" ALUControl [2:0] $end
-$var wire 32 (" N0 [31:0] $end
-$var wire 32 )" N1 [31:0] $end
-$var wire 32 *" SrcA [31:0] $end
-$var wire 32 +" SrcB [31:0] $end
-$var wire 32 ," SrcB_not [31:0] $end
-$var wire 32 -" mux1_out [31:0] $end
-$var wire 1 T Zero $end
-$var wire 32 ." N3 [31:0] $end
-$var wire 32 /" N2 [31:0] $end
-$var wire 1 0" C_out $end
-$var wire 32 1" ALUResult [31:0] $end
+$var wire 3 *" ALUControl [2:0] $end
+$var wire 32 +" N0 [31:0] $end
+$var wire 32 ," N1 [31:0] $end
+$var wire 32 -" SrcB [31:0] $end
+$var wire 32 ." SrcB_not [31:0] $end
+$var wire 32 /" mux1_out [31:0] $end
+$var wire 1 ] Zero $end
+$var wire 32 0" SrcA [31:0] $end
+$var wire 32 1" N3 [31:0] $end
+$var wire 32 2" N2 [31:0] $end
+$var wire 1 #" C_out $end
+$var wire 32 3" ALUResult [31:0] $end
 $scope module add1 $end
-$var wire 1 2" C_in $end
-$var wire 32 3" SrcB [31:0] $end
-$var wire 32 4" Y [31:0] $end
-$var wire 32 5" SrcA [31:0] $end
-$var wire 1 0" C_out $end
+$var wire 1 4" C_in $end
+$var wire 32 5" Y [31:0] $end
+$var wire 32 6" SrcB [31:0] $end
+$var wire 32 7" SrcA [31:0] $end
+$var wire 1 #" C_out $end
 $upscope $end
 $scope module mux1 $end
-$var wire 32 6" D0 [31:0] $end
-$var wire 32 7" D1 [31:0] $end
-$var wire 1 8" sel $end
-$var wire 32 9" out [31:0] $end
+$var wire 32 8" D0 [31:0] $end
+$var wire 32 9" D1 [31:0] $end
+$var wire 1 :" sel $end
+$var wire 32 ;" out [31:0] $end
 $upscope $end
 $scope module mux2 $end
-$var wire 32 :" D0 [31:0] $end
-$var wire 32 ;" D1 [31:0] $end
-$var wire 32 <" D2 [31:0] $end
-$var wire 32 =" D3 [31:0] $end
-$var wire 2 >" sel [1:0] $end
-$var wire 32 ?" out [31:0] $end
+$var wire 32 <" D0 [31:0] $end
+$var wire 32 =" D1 [31:0] $end
+$var wire 32 >" D2 [31:0] $end
+$var wire 32 ?" D3 [31:0] $end
+$var wire 2 @" sel [1:0] $end
+$var wire 32 A" out [31:0] $end
 $upscope $end
 $upscope $end
 $scope module immsh $end
-$var wire 32 @" shifted_out [31:0] $end
-$var wire 32 A" shift_in [31:0] $end
+$var wire 32 B" shifted_out [31:0] $end
+$var wire 32 C" shift_in [31:0] $end
 $upscope $end
 $scope module pcadd1 $end
-$var wire 1 B" C_in $end
-$var wire 32 C" SrcA [31:0] $end
-$var wire 32 D" SrcB [31:0] $end
-$var wire 32 E" Y [31:0] $end
-$var wire 1 F" C_out $end
+$var wire 1 D" C_in $end
+$var wire 32 E" SrcA [31:0] $end
+$var wire 32 F" SrcB [31:0] $end
+$var wire 32 G" Y [31:0] $end
+$var wire 1 H" C_out $end
 $upscope $end
 $scope module pcadd2 $end
-$var wire 1 G" C_in $end
-$var wire 32 H" SrcA [31:0] $end
-$var wire 32 I" SrcB [31:0] $end
-$var wire 32 J" Y [31:0] $end
-$var wire 1 K" C_out $end
+$var wire 1 I" C_in $end
+$var wire 32 J" SrcA [31:0] $end
+$var wire 32 K" SrcB [31:0] $end
+$var wire 32 L" Y [31:0] $end
+$var wire 1 M" C_out $end
 $upscope $end
 $scope module pcbrmux $end
-$var wire 32 L" D0 [31:0] $end
-$var wire 32 M" D1 [31:0] $end
-$var wire 1 X sel $end
-$var wire 32 N" out [31:0] $end
+$var wire 32 N" d0 [31:0] $end
+$var wire 32 O" d1 [31:0] $end
+$var wire 1 ` s $end
+$var wire 32 P" y [31:0] $end
 $upscope $end
 $scope module pcmux $end
-$var wire 32 O" D0 [31:0] $end
-$var wire 32 P" D1 [31:0] $end
-$var wire 1 [ sel $end
-$var wire 32 Q" out [31:0] $end
+$var wire 32 Q" d0 [31:0] $end
+$var wire 32 R" d1 [31:0] $end
+$var wire 1 c s $end
+$var wire 32 S" y [31:0] $end
+$upscope $end
+$scope module resmux $end
+$var wire 32 T" d0 [31:0] $end
+$var wire 32 U" d1 [31:0] $end
+$var wire 1 b s $end
+$var wire 32 V" y [31:0] $end
 $upscope $end
 $scope module rf $end
-$var wire 5 R" A1 [4:0] $end
-$var wire 5 S" A2 [4:0] $end
-$var wire 5 T" A3 [4:0] $end
-$var wire 32 U" RD1 [31:0] $end
-$var wire 32 V" RD2 [31:0] $end
-$var wire 32 W" WD3 [31:0] $end
-$var wire 1 V WE3 $end
-$var wire 1 E clk $end
+$var wire 5 W" A1 [4:0] $end
+$var wire 5 X" A2 [4:0] $end
+$var wire 1 M Clk $end
+$var wire 32 Y" WD3 [31:0] $end
+$var wire 1 ^ WE3 $end
+$var wire 32 Z" RD2 [31:0] $end
+$var wire 32 [" RD1 [31:0] $end
+$var wire 5 \" A3 [4:0] $end
 $upscope $end
 $scope module se $end
-$var wire 16 X" extend [15:0] $end
-$var wire 32 Y" extended [31:0] $end
+$var wire 16 ]" extend [15:0] $end
+$var wire 32 ^" extended [31:0] $end
+$upscope $end
+$scope module wrmux $end
+$var wire 5 _" d0 [4:0] $end
+$var wire 5 `" d1 [4:0] $end
+$var wire 1 _ s $end
+$var wire 5 a" y [4:0] $end
 $upscope $end
 $upscope $end
 $upscope $end
@@ -266,6 +277,14 @@ $upscope $end
 $enddefinitions $end
 #0
 $dumpvars
+bx a"
+bx `"
+bx _"
+bx ^"
+bx ]"
+bx \"
+bx ["
+bx Z"
 bx Y"
 bx X"
 bx W"
@@ -273,43 +292,43 @@ bx V"
 bx U"
 bx T"
 bx S"
-bx R"
+bx00 R"
 bx Q"
-bx00 P"
+bx P"
 bx O"
 bx N"
-bx M"
+xM"
 bx L"
-xK"
-bx J"
-bx I"
-bx00 H"
-0G"
-xF"
-bx E"
-bx D"
-b100 C"
-0B"
+bx K"
+bx00 J"
+0I"
+xH"
+bx G"
+bx F"
+b100 E"
+0D"
+bx C"
+bx00 B"
 bx A"
-bx00 @"
-bx ?"
+bx @"
+b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ?"
 bx >"
-b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ="
+bx ="
 bx <"
 bx ;"
-bx :"
+x:"
 bx 9"
-x8"
+bx 8"
 bx 7"
 bx 6"
 bx 5"
-bx 4"
+x4"
 bx 3"
-x2"
-bx 1"
-x0"
+bx 2"
+b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx 1"
+bx 0"
 bx /"
-b0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx ."
+bx ."
 bx -"
 bx ,"
 bx +"
@@ -320,7 +339,7 @@ bx '"
 bx &"
 bx %"
 bx $"
-bx #"
+x#"
 bx ""
 bx !"
 bx ~
@@ -328,7 +347,7 @@ bx }
 bx |
 bx {
 bx z
-bx y
+bx00 y
 bx x
 bx w
 bx v
@@ -337,83 +356,83 @@ bx t
 bx s
 bx r
 bx q
-bx00 p
+bx p
 bx o
 bx n
 bx m
 bx l
 bx k
 bx j
-bx i
+xi
 bx h
 bx g
 bx f
 bx e
-bx d
-bx c
-bx b
-xa
-bx `
-bx _
-bx ^
-bx ]
-x\
-x[
-xZ
+xd
+xc
+xb
+bx a
+x`
+x_
+x^
+x]
+bx \
+bx [
+bx Z
 bx Y
-xX
-xW
-xV
+bx X
+bx W
+bx V
 bx U
-xT
+bx T
 bx S
-bx R
+xR
 bx Q
 bx P
 bx O
-bx N
-bx M
-bx L
-bx K
-bx J
-bx I
-xH
-bx G
-zF
-zE
-b0 D
-b10 C
-b0 B
-b0 A
-b0 @
-b0 ?
-b11111111111111111111111111111000 >
-1=
-b11111111111111111111111111111000 <
-b111 ;
-b11111111111111111111111111111000 :
-b0 9
-b111 8
-17
-b0 6
-b0 5
-b0 4
-b11111111111111111111111111111000 3
-b11111111111111111111111111111000 2
-b111 1
-b111 0
-b0 /
-b0 .
-b110 -
-b111 ,
-b111 +
-b110 *
-b0 )
-1(
-1'
-bx &
+zN
+zM
+bz L
+zK
+bz J
+bz I
+b111 H
+b1 G
+b1011 F
+b1011 E
+b111 D
+b100 C
+b101 B
+0A
+b11111111111111111111111111111010 @
+b101 ?
+b101 >
+b1011 =
+b110 <
+0;
+b111 :
+b1011 9
+b1011 8
+b101 7
+b11111111111111111111111111111010 6
+b101 5
+b110 4
+b111 3
+b100 2
+b1 1
+b101 0
+b110 /
+b1 .
+b111 -
+0,
+0+
+bx *
+bz )
+bz (
+bx '
+z&
 bz %
-bz $
+z$
 bx #
 bz "
 bz !

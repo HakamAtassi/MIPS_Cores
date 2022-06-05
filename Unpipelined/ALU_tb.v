@@ -21,16 +21,16 @@ module alu_test;
 
     initial begin 
  //       ALUControl <=010; //add
-         ALUControl <=110; //subtract
+ //        ALUControl <=110; //subtract
   //       ALUControl <=000;
-    //     ALUControl <=001;
+           ALUControl <=001;
       //   ALUControl <=111;
     end
 
 
     initial begin 
-        SrcB<=32'b111;
-        SrcA<=32'b111;
+        SrcB<=32'b101;
+        SrcA<=32'b110;
         #20;
     end
 
