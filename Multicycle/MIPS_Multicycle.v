@@ -267,14 +267,15 @@ endmodule
 //IMP: it also outputs ALUOp which goes into the ALU decoder to control the operation of the ALU
 //Since this MIPS implementation is multi cycle, a state machine needs to controll the control signals based on the clock number (and instruction) its executing.
 
-module mainDecoder(Opcode,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp, 
+module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp, 
                     IorD, PCSrc,ALUSrcB,ALUSrcA,IRWrite,PCWrite,Branch); //TODO
 
 
     input [5:0] Opcode;
-    output MemtoReg,MemWrite,RegDst,RegWrite,Jump, 
+    input Clk,Reset;
+    output reg MemtoReg,MemWrite,RegDst,RegWrite,Jump, 
     IorD, PCSrc,ALUSrcA,IRWrite,PCWrite,Branch;
-    output [1:0] ALUOp, ALUSrcB;
+    output reg [1:0] ALUOp, ALUSrcB;
 
 
     reg [3:0] state,nextstate;
@@ -292,9 +293,13 @@ module mainDecoder(Opcode,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp,
     parameter S6=4'b0110;
     parameter S7=4'b0111;
     parameter S8=4'b1000;
+    parameter S9=4'b1001;
+    parameter S10=4'b1010;
 
 
-
+    always @ (posedge  Clk, posedge Reset)
+        if (Reset) state<=S0;
+        else state <=nextstate;
 
     always @(*) //convers state transitions
         case (state)
@@ -304,6 +309,7 @@ module mainDecoder(Opcode,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp,
                 6'b101011: nextstate=S2;    //store
                 6'b000000: nextstate=S6;     //r type
                 6'b000101: nextstate=S8;     //BEQ
+                6'001000: nextstate=S9;     //ADDI
                 endcase
 
             S2: case(Opcode)
@@ -317,12 +323,17 @@ module mainDecoder(Opcode,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp,
             S6: nextstate=S7;
             S7: nextstate=S0;
             S8: nextstate=S0;
+            S9: nextstate=S10;
+            S10:nextstate=S10;
+
+
+
+
         endcase
 
     
 
-
-        always @(*) 
+ always @(*) 
         begin//covers outputs (output logic)
             casex (state)   
                 S0: begin
@@ -470,9 +481,40 @@ module mainDecoder(Opcode,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp,
                     ALUOp=2'b01;
                     ALUSrcB=2'b00;
                 end
-            
+
+                S9: begin
+                    MemtoReg=1'bx;
+                    MemWrite=1'bx;
+                    RegDst=1'bx;
+                    RegWrite=1'bx;
+                    Jump=1'bx;
+                    IorD=1'bx; 
+                    PCSrc=1'bx;
+                    ALUSrcA=1'b1;
+                    IRWrite=1'bx;
+                    PCWrite=1'bx;
+                    Branch=1'bx;
+                    ALUOp=2'b00;
+                    ALUSrcB=2'b10;
+                end
+                S10: begin
+                    MemtoReg=1'b0;
+                    MemWrite=1'bx;
+                    RegDst=1'b1;
+                    RegWrite=1'b1;
+                    Jump=1'bx;
+                    IorD=1'bx; 
+                    PCSrc=1'bx;
+                    ALUSrcA=1'bx;
+                    IRWrite=1'bx;
+                    PCWrite=1'bx;
+                    Branch=1'bx;
+                    ALUOp=2'bxx;
+                    ALUSrcB=2'bxx;
+                end
             endcase
         end
+        
 
 
 

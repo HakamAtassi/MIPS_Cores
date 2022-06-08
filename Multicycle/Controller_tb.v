@@ -1,4 +1,4 @@
-`include "MIPS_Single_Cycle.v"
+`include "MIPS_Multicycle.v"
 
 
 
@@ -12,7 +12,7 @@ module Controller_tb;
 
 
     reg [5:0] Opcode;
-
+    reg Clk,Reset;
 
 
     initial begin 
@@ -23,21 +23,30 @@ module Controller_tb;
     end
 
 
-    mainDecoder dut(Opcode,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp, IorD, PCSrc,ALUSrcB,ALUSrcA,IRWrite,PCWrite,Branch);
+    mainDecoder dut(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp, IorD, PCSrc,ALUSrcB,ALUSrcA,IRWrite,PCWrite,Branch);
 
 
     initial begin
-       Opcode<=6'b000000; #10; 
+        //Opcode<=6'b100011;#10; //load 
+        //Opcode<=6'b101011;#10;   //store
+        Opcode<=6'b000000;#10;     //r type
+        //Opcode<=6'b000101;#10;     //BEQ
+        //6'001000: nextstate=S9;    //ADDI
     end
 
 
     initial begin 
-        #100; $stop;
+        #150; $stop;
+    end
+
+
+    initial begin 
+        Reset<=1; #10; Reset<=0;
     end
 
 
     always begin
-        Clk<=0; #10; Clk<=10;
+        Clk<=0; #10; Clk<=1; #10;
     end
 
 

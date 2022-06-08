@@ -1,0 +1,365 @@
+$date
+	Wed Jun  8 23:55:40 2022
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module ALU $end
+$var wire 3 ! ALUControl [2:0] $end
+$var wire 32 " N0 [31:0] $end
+$var wire 32 # N1 [31:0] $end
+$var wire 32 $ SrcA [31:0] $end
+$var wire 32 % SrcB [31:0] $end
+$var wire 32 & SrcB_not [31:0] $end
+$var wire 32 ' mux1_out [31:0] $end
+$var wire 1 ( Zero $end
+$var wire 32 ) N3 [31:0] $end
+$var wire 32 * N2 [31:0] $end
+$var wire 1 + C_out $end
+$var wire 32 , ALUResult [31:0] $end
+$scope module add1 $end
+$var wire 1 - C_in $end
+$var wire 32 . SrcB [31:0] $end
+$var wire 32 / Y [31:0] $end
+$var wire 32 0 SrcA [31:0] $end
+$var wire 1 + C_out $end
+$upscope $end
+$scope module mux1 $end
+$var wire 32 1 D0 [31:0] $end
+$var wire 32 2 D1 [31:0] $end
+$var wire 1 3 sel $end
+$var wire 32 4 out [31:0] $end
+$upscope $end
+$scope module mux2 $end
+$var wire 32 5 D0 [31:0] $end
+$var wire 32 6 D1 [31:0] $end
+$var wire 32 7 D2 [31:0] $end
+$var wire 32 8 D3 [31:0] $end
+$var wire 2 9 sel [1:0] $end
+$var wire 32 : out [31:0] $end
+$upscope $end
+$upscope $end
+$scope module AluDecoder $end
+$var wire 2 ; AluOP [1:0] $end
+$var wire 6 < Funct [5:0] $end
+$var reg 3 = ALUControl [2:0] $end
+$upscope $end
+$scope module And $end
+$var wire 32 > SrcA [31:0] $end
+$var wire 32 ? SrcB [31:0] $end
+$var wire 32 @ Y [31:0] $end
+$upscope $end
+$scope module Controller_tb $end
+$var wire 1 A RegWrite $end
+$var wire 1 B RegDst $end
+$var wire 1 C PCWrite $end
+$var wire 1 D PCSrc $end
+$var wire 1 E MemtoReg $end
+$var wire 1 F MemWrite $end
+$var wire 1 G Jump $end
+$var wire 1 H IorD $end
+$var wire 1 I IRWrite $end
+$var wire 1 J Branch $end
+$var wire 2 K ALUSrcB [1:0] $end
+$var wire 1 L ALUSrcA $end
+$var wire 2 M ALUOp [1:0] $end
+$var reg 1 N Clk $end
+$var reg 6 O Opcode [5:0] $end
+$var reg 1 P Reset $end
+$scope module dut $end
+$var wire 1 N Clk $end
+$var wire 6 Q Opcode [5:0] $end
+$var wire 1 P Reset $end
+$var reg 2 R ALUOp [1:0] $end
+$var reg 1 L ALUSrcA $end
+$var reg 2 S ALUSrcB [1:0] $end
+$var reg 1 J Branch $end
+$var reg 1 I IRWrite $end
+$var reg 1 H IorD $end
+$var reg 1 G Jump $end
+$var reg 1 F MemWrite $end
+$var reg 1 E MemtoReg $end
+$var reg 1 D PCSrc $end
+$var reg 1 C PCWrite $end
+$var reg 1 B RegDst $end
+$var reg 1 A RegWrite $end
+$var reg 4 T nextstate [3:0] $end
+$var reg 4 U state [3:0] $end
+$upscope $end
+$upscope $end
+$scope module Instruction_memory $end
+$var wire 6 V A [5:0] $end
+$var wire 32 W RD [31:0] $end
+$upscope $end
+$scope module Or $end
+$var wire 32 X SrcA [31:0] $end
+$var wire 32 Y SrcB [31:0] $end
+$var wire 32 Z Y [31:0] $end
+$upscope $end
+$scope module SignExtender $end
+$var wire 16 [ extend [15:0] $end
+$var wire 32 \ extended [31:0] $end
+$upscope $end
+$scope module controller $end
+$var wire 6 ] ALUControl [5:0] $end
+$var wire 1 ^ ALUSrcA $end
+$var wire 2 _ ALUSrcB [1:0] $end
+$var wire 1 ` Branch $end
+$var wire 1 a Clk $end
+$var wire 6 b Funct [5:0] $end
+$var wire 1 c IRWrite $end
+$var wire 1 d IorD $end
+$var wire 1 e MemWrite $end
+$var wire 1 f MemtoReg $end
+$var wire 6 g Opcode [5:0] $end
+$var wire 1 h PCEn $end
+$var wire 1 i PCSrc $end
+$var wire 1 j PCWrite $end
+$var wire 1 k RegDst $end
+$var wire 1 l RegWrite $end
+$var wire 1 m Zero $end
+$upscope $end
+$scope module data_memory $end
+$var wire 32 n A [31:0] $end
+$var wire 1 o Clk $end
+$var wire 32 p WD [31:0] $end
+$var wire 1 q WE $end
+$var reg 32 r RD [31:0] $end
+$upscope $end
+$scope module flopr $end
+$var wire 1 s Clk $end
+$var wire 1 t Reset $end
+$var wire 8 u d [7:0] $end
+$var reg 8 v q [7:0] $end
+$upscope $end
+$scope module mux2 $end
+$var wire 8 w d0 [7:0] $end
+$var wire 8 x d1 [7:0] $end
+$var wire 1 y s $end
+$var wire 8 z y [7:0] $end
+$upscope $end
+$scope module mux_2_5b $end
+$var wire 5 { D0 [4:0] $end
+$var wire 5 | D1 [4:0] $end
+$var wire 1 } sel $end
+$var wire 5 ~ out [4:0] $end
+$upscope $end
+$scope module registerFile $end
+$var wire 5 !" A1 [4:0] $end
+$var wire 5 "" A2 [4:0] $end
+$var wire 5 #" A3 [4:0] $end
+$var wire 1 $" Clk $end
+$var wire 32 %" WD3 [31:0] $end
+$var wire 1 &" WE3 $end
+$var wire 32 '" RD2 [31:0] $end
+$var wire 32 (" RD1 [31:0] $end
+$upscope $end
+$scope module shift_left_2 $end
+$var wire 32 )" shift_in [31:0] $end
+$var wire 32 *" shifted_out [31:0] $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+bz00 *"
+bz )"
+bx ("
+bx '"
+z&"
+bz %"
+z$"
+bz #"
+bz ""
+bz !"
+bz ~
+z}
+bz |
+bz {
+bz z
+zy
+bz x
+bz w
+bx v
+bz u
+zt
+zs
+bx r
+zq
+bz p
+zo
+bz n
+zm
+zl
+zk
+zj
+zi
+zh
+bz g
+zf
+ze
+zd
+zc
+bz b
+za
+z`
+bz _
+z^
+bz ]
+bz \
+bz [
+bx Z
+bz Y
+bz X
+bx W
+bz V
+b0 U
+b1 T
+b1 S
+b0 R
+b0 Q
+1P
+b0 O
+0N
+b0 M
+0L
+b1 K
+xJ
+1I
+0H
+xG
+xF
+xE
+0D
+1C
+xB
+xA
+bx @
+bz ?
+bz >
+bx =
+bz <
+bz ;
+bx :
+bz 9
+b0x 8
+bx 7
+bx 6
+bx 5
+bz 4
+z3
+bz 2
+bz 1
+bz 0
+bx /
+bz .
+z-
+bx ,
+x+
+bx *
+b0x )
+x(
+bz '
+bz &
+bz %
+bz $
+bx #
+bx "
+bz !
+$end
+#10
+b11 K
+b11 S
+xC
+xI
+xD
+xH
+b110 T
+b1 U
+1N
+0P
+#20
+0N
+#30
+b0 K
+b0 S
+b10 M
+b10 R
+1L
+b111 T
+b110 U
+1N
+#40
+0N
+#50
+bx K
+bx S
+bx M
+bx R
+xL
+1A
+1B
+0E
+b0 T
+b111 U
+1N
+#60
+0N
+#70
+b1 K
+b1 S
+b0 M
+b0 R
+1C
+1I
+0L
+0D
+0H
+xA
+xB
+xE
+b1 T
+b0 U
+1N
+#80
+0N
+#90
+b11 K
+b11 S
+xC
+xI
+xD
+xH
+b110 T
+b1 U
+1N
+#100
+0N
+#110
+b0 K
+b0 S
+b10 M
+b10 R
+1L
+b111 T
+b110 U
+1N
+#120
+0N
+#130
+bx K
+bx S
+bx M
+bx R
+xL
+1A
+1B
+0E
+b0 T
+b111 U
+1N
+#140
+0N
+#150
