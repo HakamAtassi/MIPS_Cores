@@ -23,7 +23,7 @@ module Controller_tb;
     end
 
 
-    controller dut(Opcode,Funct,Zero,Clk,Reset,MemtoReg,MemWrite,PCSrc,RegDst,RegWrite,ALUControl,Branch, IorD,IRWrite, PCWrite,ALUSrcB,ALUSrcA,PCEn);
+    mainDecoder dut(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp, IorD, PCSrc,ALUSrcB,ALUSrcA,IRWrite,PCWrite,Branch);
 
 
     initial begin

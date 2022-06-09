@@ -1,7 +1,3 @@
-//on reset PC should begin at 0xBFC0 0000
-
-
-
 //32 bit flip flop with active high reset 
 module flopr #(parameter WIDTH = 8) (Clk,Reset, d, q);
 
@@ -13,6 +9,19 @@ module flopr #(parameter WIDTH = 8) (Clk,Reset, d, q);
     always @ (posedge Clk,posedge Reset)
         if(Reset) q<=0;
         else q<=d; //output new PC from alu on posedge Clk 
+endmodule
+
+
+module flopr_EN #(parameter WIDTH = 8) (Clk,Reset,EN,d, q);   //flip flop with enable
+
+    input Clk, Reset,EN;
+    input [WIDTH-1:0] d;
+    output reg [WIDTH-1:0] q;
+
+    
+    always @ (posedge Clk,posedge Reset)
+        if(Reset) q<=0;
+        else if(EN==1) q<=d; //output new PC from alu on posedge Clk 
 endmodule
 
 
@@ -91,6 +100,12 @@ module data_memory(Clk, WE, A, WD, RD);
 
   //  always @ (posedge Clk)
     //    if(WE==1) data[A[31:2]] <=WD;
+
+    initial
+        begin 
+            $readmemh("memfile.dat",data); //read dissassembled MIPS code and load it into ram
+    end
+
 
     always @(*) begin
         RD<=data[A[31:2]];
@@ -268,7 +283,7 @@ endmodule
 //Since this MIPS implementation is multi cycle, a state machine needs to controll the control signals based on the clock number (and instruction) its executing.
 
 module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp, 
-                    IorD, PCSrc,ALUSrcB,ALUSrcA,IRWrite,PCWrite,Branch); //TODO
+                    IorD, PCSrc,ALUSrcB,ALUSrcA,IRWrite,PCWrite,Branch); 
 
 
     input [5:0] Opcode;
@@ -295,10 +310,10 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
     parameter S8=4'b1000;
     parameter S9=4'b1001;
     parameter S10=4'b1010;
+    parameter Reset_state=4'bxxxx;
 
-
-    always @ (posedge  Clk, posedge Reset)
-        if (Reset) state<=S0;
+    always @ (posedge  Clk, posedge Reset)                           
+        if (Reset) state<=Reset_state;
         else state <=nextstate;
 
     always @(*) //convers state transitions
@@ -309,7 +324,7 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
                 6'b101011: nextstate=S2;    //store
                 6'b000000: nextstate=S6;     //r type
                 6'b000101: nextstate=S8;     //BEQ
-                6'001000: nextstate=S9;     //ADDI
+                6'b001000: nextstate=S9;     //ADDI
                 endcase
 
             S2: case(Opcode)
@@ -324,7 +339,8 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
             S7: nextstate=S0;
             S8: nextstate=S0;
             S9: nextstate=S10;
-            S10:nextstate=S10;
+            S10:nextstate=S0;
+            Reset_state:nextstate=S0;
 
 
 
@@ -335,7 +351,7 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
 
  always @(*) 
         begin//covers outputs (output logic)
-            casex (state)   
+            case (state)   
                 S0: begin
 
                     MemtoReg=1'bx;
@@ -512,6 +528,21 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
                     ALUOp=2'bxx;
                     ALUSrcB=2'bxx;
                 end
+                Reset_state: begin
+                    MemtoReg=1'bx;
+                    MemWrite=1'bx;
+                    RegDst=1'bx;
+                    RegWrite=1'bx;
+                    Jump=1'bx;
+                    IorD=1'bx; 
+                    PCSrc=1'bx;
+                    ALUSrcA=1'bx;
+                    IRWrite=1'bx;
+                    PCWrite=1'bx;
+                    Branch=1'bx;
+                    ALUOp=2'bxx;
+                    ALUSrcB=2'bxx;
+                end
             endcase
         end
         
@@ -524,35 +555,103 @@ endmodule
 
 
 
-module controller (Opcode,Funct,Zero,Clk,MemtoReg,MemWrite,PCSrc,RegDst,RegWrite,ALUControl,Branch, IorD,IRWrite, PCWrite,ALUSrcB,ALUSrcA,PCEn);
+module controller (Opcode,Funct,Zero,Clk,Reset,MemtoReg,MemWrite,PCSrc,RegDst,RegWrite,ALUControl,Branch, IorD,IRWrite, PCWrite,ALUSrcB,ALUSrcA,PCEn);
 
-
-    //TODO
 
     input [5:0] Opcode, Funct;
-    input Zero,Clk;
+    input Zero,Clk,Reset;
 
     output MemtoReg,MemWrite,PCSrc,RegDst,RegWrite,Branch, IorD,IRWrite, PCWrite,ALUSrcA,PCEn;
-    output [5:0] ALUControl;
+    output [2:0] ALUControl;
     output [1:0] ALUSrcB;
 
 
+    wire [1:0] ALUOp;
 
+
+
+
+    mainDecoder md (Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp, 
+                    IorD, PCSrc,ALUSrcB,ALUSrcA,IRWrite,PCWrite,Branch);
+
+    AluDecoder ALUDec (Funct,ALUOp,ALUControl);
+
+
+    assign PCEn = PCWrite||(Zero&&Branch);
 
 
 endmodule
 
-
-/*
-module datapath(Clk,Reset,MemtoReg,PCSrc,ALUSrc,RegDst,RegWrite,Jump,ALUControl,Zero,PC,Instr,ALUOut,WriteData,ReadData); //TODO
+                             //control inputs                                                                           
+module datapath(Clk,Reset,
+MemtoReg,PCSrc,RegDst,RegWrite,ALUControl,Branch, IorD,IRWrite, PCWrite,ALUSrcB,ALUSrcA,PCEn,
+WriteData, Adr,
+ReadData,
+Zero, Op, Funct
+);
  
+    input Clk,Reset;
+    input MemtoReg,PCSrc,RegDst,RegWrite,Branch, IorD,IRWrite, PCWrite,ALUSrcA,PCEn;    //control logic input
+    input [2:0] ALUControl;
+    input [1:0] ALUSrcB;    //control logic input
+    input [31:0] ReadData;  //output of memory (RAM)
+
+    output [31:0] WriteData, Adr; //input to RAM 
+    output Zero;    //ALU Zero flag
+    output [5:0] Op, Funct; //input to Control unit
+    
+
+    wire [4:0] A3;
+    wire [31:0] WD3, RD1, RD2, Data, A, B;
+
+    wire [31:0] Instr;
+
+    mux2 #5 A3_Mux(Instr[20:16],Instr[15:11],RegDst, A3);
+    mux2 #32 WD3_Mux(ALUOut,Data,MemtoReg, WD3);
+
+    registerFile regFile(Clk,RegWrite,Instr[25:21],Instr[20:16],A3,WD3,RD1,RD2);
+
+    flopr #32 RD1_ff(Clk,Reset,RD1,A);
+    flopr #32 RD2_ff(Clk,Reset,RD2,B);
 
 
+    assign WriteData=B;
 
+    wire [31:0] SignImm;
+    SignExtender se(Instr[15:0],SignImm);
 
+    
+    wire [31:0] PC, SrcA;
+    mux2 #32 SrcA_Mux(PC,A,ALUSrcA,SrcA);
 
+    wire [31:0] shifted_SignImm;
+    shift_left_2 sl2(shifted_SignImm,SignImm);  //out, in
 
-endmodule*/
+    wire [31:0] SrcB;
+    mux_4_32b SrcB_Mux(SrcB,ALUSrcB,B,3'b100,SignImm,shifted_SignImm);
+
+    wire [31:0] ALUResult;
+    wire C_out;
+    ALU mainALU (Zero, ALUResult, C_out,ALUControl,SrcA,SrcB);
+
+    wire [31:0] ALUOut;
+    flopr #32 ALU_reg(Clk,Reset,ALUResult,ALUOut);
+
+    wire [31:0] PC_prime;
+    mux2 #32 ALU_Mux(ALUResult,ALUOut,PCSrc,PC_prime);
+
+    flopr_EN #32 PC_reg(Clk,Reset,PCEn,PC_prime,PC);
+
+    mux2 #32 Adr_mux(PC,ALUOut,IorD,Adr);
+
+    flopr_EN #32 instruction_reg (Clk,Reset,IRWrite,ReadData,Instr);
+
+    flopr #32 data_reg (Clk,Reset,ReadData,Data);
+    
+    assign Op= Instr[31:26];
+    assign Funct=Instr[5:0];
+
+endmodule
 
 module mux_2_5b(out, sel, D0, D1); //for controlling A3
 
@@ -564,18 +663,52 @@ module mux_2_5b(out, sel, D0, D1); //for controlling A3
 
 endmodule
 
-/**
-module MIPS (Clk,reset,PC,Instr,memwrite,ALUOut,writedata,ReadData);     //TODO
 
 
 
 
+
+module MIPS (Clk,Reset,ReadData,PC,MemWrite,WriteData);     //connects between dp and controll
+
+    input Clk, Reset; 
+    input [31:0] ReadData;
+
+    output MemWrite;
+    output [31:0] PC, WriteData;
+
+
+    wire MemtoReg,MemWrite,PCSrc,RegDst,RegWrite,Branch, IorD,IRWrite, PCWrite,ALUSrcA,PCEn;    //control signals
+    wire [2:0] ALUControl;  
+    wire [1:0] ALUSrcB;
+
+    wire [5:0] Opcode, Funct;
+    wire Zero;
+
+    datapath dp(Clk,Reset,
+    MemtoReg,PCSrc,RegDst,RegWrite,ALUControl,Branch, IorD,IRWrite, PCWrite,ALUSrcB,ALUSrcA,PCEn,
+    WriteData, PC,
+    ReadData,
+    Zero, Opcode, Funct
+    );
+
+    controller control(Opcode,Funct,Zero,Clk,Reset,
+    MemtoReg,MemWrite,PCSrc,RegDst,RegWrite,ALUControl,Branch, IorD,IRWrite, PCWrite,ALUSrcB,ALUSrcA,PCEn);
 
 
 endmodule
 
 
-module top(Clk, Reset, WriteData,DataAdr,MemWrite); //TODO
+module top(Clk, Reset, WriteData,DataAdr,MemWrite); //Connects memory to mips core
+
+    input Clk,Reset;
+    output [31:0] DataAdr,WriteData;
+    output MemWrite;
+    
+    wire [31:0] PC, ReadData;
+    
+    MIPS core(Clk,Reset,ReadData,PC,MemWrite,WriteData);
+    
+    data_memory RAM(Clk, MemWrite, PC, WriteData, ReadData);
+
 
 endmodule
-**/
