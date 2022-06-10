@@ -289,7 +289,8 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
     input [5:0] Opcode;
     input Clk,Reset;
     output reg MemtoReg,MemWrite,RegDst,RegWrite,Jump, 
-    IorD, PCSrc,ALUSrcA,IRWrite,PCWrite,Branch;
+    IorD,ALUSrcA,IRWrite,PCWrite,Branch;
+    output reg [1:0] PCSrc;
     output reg [1:0] ALUOp, ALUSrcB;
 
 
@@ -310,6 +311,7 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
     parameter S8=4'b1000;
     parameter S9=4'b1001;
     parameter S10=4'b1010;
+    parameter S11=4'b1011;
     parameter Reset_state=4'bxxxx;
 
     always @ (posedge  Clk, posedge Reset)                           
@@ -323,8 +325,9 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
                 6'b100011: nextstate=S2;    //load 
                 6'b101011: nextstate=S2;    //store
                 6'b000000: nextstate=S6;     //r type
-                6'b000101: nextstate=S8;     //BEQ
+                6'b000100: nextstate=S8;     //BEQ
                 6'b001000: nextstate=S9;     //ADDI
+                6'b000010: nextstate=S11;     //ADDI
                 endcase
 
             S2: case(Opcode)
@@ -340,6 +343,7 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
             S8: nextstate=S0;
             S9: nextstate=S10;
             S10:nextstate=S0;
+            S11:nextstate=S0;
             Reset_state:nextstate=S0;
 
 
@@ -360,7 +364,7 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
                     RegWrite=1'bx;
                     Jump=1'bx;
                     IorD=1'b0; 
-                    PCSrc=1'b0;
+                    PCSrc=2'b00;
                     ALUSrcA=1'b0;
                     IRWrite=1'b1;
                     PCWrite=1'b1;
@@ -376,7 +380,7 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
                     RegWrite=1'bx;
                     Jump=1'bx;
                     IorD=1'bx; 
-                    PCSrc=1'bx;
+                    PCSrc=2'bxx;
                     ALUSrcA=1'b0;
                     IRWrite=1'bx;
                     PCWrite=1'bx;
@@ -392,7 +396,7 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
                     RegWrite=1'bx;
                     Jump=1'bx; 
                     IorD=1'bx; 
-                    PCSrc=1'bx;
+                    PCSrc=2'bxx;
                     ALUSrcA=1'b1;
                     IRWrite=1'bx;
                     PCWrite=1'bx;
@@ -408,7 +412,7 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
                     RegWrite=1'bx;
                     Jump=1'bx;
                     IorD=1'b1; 
-                    PCSrc=1'bx;
+                    PCSrc=2'bxx;
                     ALUSrcA=1'bx;
                     IRWrite=1'bx;
                     PCWrite=1'bx;
@@ -425,7 +429,7 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
                     RegWrite=1'b1;
                     Jump=1'bx;
                     IorD=1'bx; 
-                    PCSrc=1'bx;
+                    PCSrc=2'bxx;
                     ALUSrcA=1'bx;
                     IRWrite=1'bx;
                     PCWrite=1'bx;
@@ -441,7 +445,7 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
                     RegWrite=1'bx;
                     Jump=1'bx;
                     IorD=1'b1; 
-                    PCSrc=1'bx;
+                    PCSrc=2'bxx;
                     ALUSrcA=1'bx;
                     IRWrite=1'bx;
                     PCWrite=1'bx;
@@ -457,7 +461,7 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
                     RegWrite=1'bx;
                     Jump=1'bx;
                     IorD=1'bx; 
-                    PCSrc=1'bx;
+                    PCSrc=2'bxx;
                     ALUSrcA=1'b1;
                     IRWrite=1'bx;
                     PCWrite=1'bx;
@@ -473,7 +477,7 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
                     RegWrite=1'b1;
                     Jump=1'bx;
                     IorD=1'bx; 
-                    PCSrc=1'bx;
+                    PCSrc=2'bxx;
                     ALUSrcA=1'bx;
                     IRWrite=1'bx;
                     PCWrite=1'bx;
@@ -489,7 +493,7 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
                     RegWrite=1'bx;
                     Jump=1'bx;
                     IorD=1'bx; 
-                    PCSrc=1'b1;
+                    PCSrc=2'b01;
                     ALUSrcA=1'b1;
                     IRWrite=1'bx;
                     PCWrite=1'bx;
@@ -505,7 +509,7 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
                     RegWrite=1'bx;
                     Jump=1'bx;
                     IorD=1'bx; 
-                    PCSrc=1'bx;
+                    PCSrc=2'bxx;
                     ALUSrcA=1'b1;
                     IRWrite=1'bx;
                     PCWrite=1'bx;
@@ -516,11 +520,11 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
                 S10: begin
                     MemtoReg=1'b0;
                     MemWrite=1'bx;
-                    RegDst=1'b1;
+                    RegDst=1'b0;
                     RegWrite=1'b1;
                     Jump=1'bx;
                     IorD=1'bx; 
-                    PCSrc=1'bx;
+                    PCSrc=2'bxx;
                     ALUSrcA=1'bx;
                     IRWrite=1'bx;
                     PCWrite=1'bx;
@@ -528,6 +532,23 @@ module mainDecoder(Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp
                     ALUOp=2'bxx;
                     ALUSrcB=2'bxx;
                 end
+
+                S11: begin                      //ADD Stuff here
+                    MemtoReg=1'bx;
+                    MemWrite=1'bx;
+                    RegDst=1'bx;
+                    RegWrite=1'bx;
+                    Jump=1'bx;
+                    IorD=1'bx; 
+                    PCSrc=2'b10;
+                    ALUSrcA=1'bx;
+                    IRWrite=1'bx;
+                    PCWrite=1'b1;
+                    Branch=1'bx;
+                    ALUOp=2'bxx;
+                    ALUSrcB=2'bxx;
+                end
+
                 Reset_state: begin
                     MemtoReg=1'bx;
                     MemWrite=1'bx;
@@ -561,14 +582,12 @@ module controller (Opcode,Funct,Zero,Clk,Reset,MemtoReg,MemWrite,PCSrc,RegDst,Re
     input [5:0] Opcode, Funct;
     input Zero,Clk,Reset;
 
-    output MemtoReg,MemWrite,PCSrc,RegDst,RegWrite,Branch, IorD,IRWrite, PCWrite,ALUSrcA,PCEn;
+    output MemtoReg,MemWrite,RegDst,RegWrite,Branch, IorD,IRWrite, PCWrite,ALUSrcA,PCEn;
     output [2:0] ALUControl;
-    output [1:0] ALUSrcB;
+    output [1:0] ALUSrcB,PCSrc;
 
 
     wire [1:0] ALUOp;
-
-
 
 
     mainDecoder md (Opcode,Clk,Reset,MemtoReg,MemWrite,RegDst,RegWrite,Jump,ALUOp, 
@@ -591,9 +610,10 @@ Zero, Op, Funct
 );
  
     input Clk,Reset;
-    input MemtoReg,PCSrc,RegDst,RegWrite,Branch, IorD,IRWrite, PCWrite,ALUSrcA,PCEn;    //control logic input
+    input MemtoReg,RegDst,RegWrite,Branch, IorD,IRWrite, PCWrite,ALUSrcA,PCEn;    //control logic input
+   
     input [2:0] ALUControl;
-    input [1:0] ALUSrcB;    //control logic input
+    input [1:0] ALUSrcB,PCSrc;    //control logic input
     input [31:0] ReadData;  //output of memory (RAM)
 
     output [31:0] WriteData, Adr; //input to RAM 
@@ -638,7 +658,17 @@ Zero, Op, Funct
     flopr #32 ALU_reg(Clk,Reset,ALUResult,ALUOut);
 
     wire [31:0] PC_prime;
-    mux2 #32 ALU_Mux(ALUResult,ALUOut,PCSrc,PC_prime);
+    wire [25:0] j_addr;
+
+    shift_left_2 j_addr_shift(j_addr,Instr[25:0]);
+
+    mux_4_32b ALU_Mux(PC_prime,PCSrc,ALUResult,ALUOut,j_addr,); //pcsrc 2 bits now
+
+
+   // mux2 #32 ALU_Mux(ALUResult,ALUOut,PCSrc,PC_prime);
+
+
+
 
     flopr_EN #32 PC_reg(Clk,Reset,PCEn,PC_prime,PC);
 
@@ -677,9 +707,9 @@ module MIPS (Clk,Reset,ReadData,PC,MemWrite,WriteData);     //connects between d
     output [31:0] PC, WriteData;
 
 
-    wire MemtoReg,MemWrite,PCSrc,RegDst,RegWrite,Branch, IorD,IRWrite, PCWrite,ALUSrcA,PCEn;    //control signals
+    wire MemtoReg,MemWrite,RegDst,RegWrite,Branch, IorD,IRWrite, PCWrite,ALUSrcA,PCEn;    //control signals
     wire [2:0] ALUControl;  
-    wire [1:0] ALUSrcB;
+    wire [1:0] ALUSrcB,PCSrc;
 
     wire [5:0] Opcode, Funct;
     wire Zero;
@@ -706,9 +736,9 @@ module top(Clk, Reset, WriteData,DataAdr,MemWrite); //Connects memory to mips co
     
     wire [31:0] PC, ReadData;
     
-    MIPS core(Clk,Reset,ReadData,PC,MemWrite,WriteData);
+    MIPS core(Clk,Reset,ReadData,DataAdr,MemWrite,WriteData);
     
-    data_memory RAM(Clk, MemWrite, PC, WriteData, ReadData);
+    data_memory RAM(Clk, MemWrite, DataAdr, WriteData, ReadData);
 
 
 endmodule

@@ -1,0 +1,148 @@
+[*]
+[*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
+[*] Thu Jun  9 23:30:29 2022
+[*]
+[dumpfile] "/home/hakam/Documents/MIPS_Verilog/Multicycle/top.vcd"
+[dumpfile_mtime] "Thu Jun  9 21:41:46 2022"
+[dumpfile_size] 52706
+[savefile] "/home/hakam/Documents/MIPS_Verilog/Multicycle/top_gtkwave.gtkw"
+[timestart] 0
+[size] 1920 1016
+[pos] -1 -1
+*-5.000000 60 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] testbench.
+[treeopen] testbench.dut.
+[treeopen] testbench.dut.core.
+[treeopen] testbench.dut.core.control.
+[treeopen] testbench.dut.core.dp.
+[treeopen] testbench.dut.core.dp.mainALU.
+[sst_width] 233
+[signals_width] 286
+[sst_expanded] 1
+[sst_vpaned_height] 436
+@28
+testbench.dut.core.dp.instruction_reg.Clk
+testbench.dut.core.control.md.Reset
+@200
+-PC
+@28
+testbench.dut.core.dp.PC_reg.Clk
+testbench.dut.core.dp.PC_reg.EN
+testbench.dut.core.dp.PC_reg.Reset
+@22
+testbench.dut.core.dp.PC_reg.d[31:0]
+@24
+testbench.dut.core.dp.PC_reg.q[31:0]
+@200
+-ALUDec
+@28
+testbench.dut.core.control.ALUDec.ALUControl[2:0]
+testbench.dut.core.control.ALUDec.AluOP[1:0]
+@22
+testbench.dut.core.control.ALUDec.Funct[5:0]
+@200
+-Control
+@28
+testbench.dut.core.control.md.Opcode[5:0]
+testbench.dut.core.control.Funct[5:0]
+testbench.dut.core.control.md.ALUOp[1:0]
+testbench.dut.core.control.md.ALUSrcA
+testbench.dut.core.control.md.ALUSrcB[1:0]
+testbench.dut.core.control.md.Branch
+testbench.dut.core.control.md.Clk
+testbench.dut.core.control.md.IRWrite
+testbench.dut.core.control.md.IorD
+testbench.dut.core.control.md.Jump
+testbench.dut.core.control.md.MemWrite
+testbench.dut.core.control.md.MemtoReg
+testbench.dut.core.control.md.PCSrc
+testbench.dut.core.control.md.PCWrite
+testbench.dut.core.control.md.RegDst
+testbench.dut.core.control.md.RegWrite
+@22
+testbench.dut.core.control.md.nextstate[3:0]
+testbench.dut.core.control.md.state[3:0]
+@200
+-ALU
+@28
+testbench.dut.core.dp.mainALU.ALUControl[2:0]
+@22
+testbench.dut.core.dp.mainALU.ALUResult[31:0]
+@28
+testbench.dut.core.dp.mainALU.C_out
+@22
+testbench.dut.core.dp.mainALU.N0[31:0]
+testbench.dut.core.dp.mainALU.N1[31:0]
+testbench.dut.core.dp.mainALU.N2[31:0]
+testbench.dut.core.dp.mainALU.N3[31:0]
+testbench.dut.core.dp.mainALU.SrcA[31:0]
+testbench.dut.core.dp.mainALU.SrcB[31:0]
+testbench.dut.core.dp.mainALU.SrcB_not[31:0]
+@28
+testbench.dut.core.dp.mainALU.Zero
+@22
+testbench.dut.core.dp.mainALU.mux1_out[31:0]
+@200
+-RAM
+@22
+testbench.dut.RAM.A[31:0]
+@28
+testbench.dut.RAM.Clk
+@22
+testbench.dut.RAM.RD[31:0]
+testbench.dut.RAM.WD[31:0]
+@28
+testbench.dut.RAM.WE
+@200
+-ALUMux
+@22
+testbench.dut.core.dp.ALU_Mux.d0[31:0]
+testbench.dut.core.dp.ALU_Mux.d1[31:0]
+@28
+testbench.dut.core.dp.ALU_Mux.s
+@22
+testbench.dut.core.dp.ALU_Mux.y[31:0]
+@200
+-Instruction register
+@28
+testbench.dut.core.dp.instruction_reg.Clk
+testbench.dut.core.dp.instruction_reg.EN
+testbench.dut.core.dp.instruction_reg.Reset
+@22
+testbench.dut.core.dp.instruction_reg.d[31:0]
+testbench.dut.core.dp.instruction_reg.q[31:0]
+@200
+-Sign Extend
+@22
+testbench.dut.core.dp.se.extend[15:0]
+testbench.dut.core.dp.se.extended[31:0]
+@24
+testbench.dut.core.dp.sl2.shifted_out[31:0]
+testbench.dut.core.dp.sl2.shift_in[31:0]
+@200
+-testbench
+@28
+testbench.clk
+@22
+testbench.dataadr[31:0]
+@28
+testbench.memwrite
+testbench.reset
+@22
+testbench.writedata[31:0]
+@200
+-regFile
+@22
+testbench.dut.core.dp.regFile.A1[4:0]
+testbench.dut.core.dp.regFile.A2[4:0]
+testbench.dut.core.dp.regFile.A3[4:0]
+@28
+testbench.dut.core.dp.regFile.Clk
+@22
+testbench.dut.core.dp.regFile.RD1[31:0]
+testbench.dut.core.dp.regFile.RD2[31:0]
+testbench.dut.core.dp.regFile.WD3[31:0]
+@28
+testbench.dut.core.dp.regFile.WE3
+[pattern_trace] 1
+[pattern_trace] 0
