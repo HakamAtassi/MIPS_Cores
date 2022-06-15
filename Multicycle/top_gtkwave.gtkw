@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.104 (w)1999-2020 BSI
-[*] Thu Jun  9 23:30:29 2022
+[*] Fri Jun 10 00:23:30 2022
 [*]
 [dumpfile] "/home/hakam/Documents/MIPS_Verilog/Multicycle/top.vcd"
-[dumpfile_mtime] "Thu Jun  9 21:41:46 2022"
-[dumpfile_size] 52706
+[dumpfile_mtime] "Fri Jun 10 00:22:40 2022"
+[dumpfile_size] 68454
 [savefile] "/home/hakam/Documents/MIPS_Verilog/Multicycle/top_gtkwave.gtkw"
-[timestart] 0
+[timestart] 434
 [size] 1920 1016
 [pos] -1 -1
-*-5.000000 60 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-5.000000 463 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] testbench.
 [treeopen] testbench.dut.
 [treeopen] testbench.dut.core.
@@ -17,7 +17,7 @@
 [treeopen] testbench.dut.core.dp.
 [treeopen] testbench.dut.core.dp.mainALU.
 [sst_width] 233
-[signals_width] 286
+[signals_width] 307
 [sst_expanded] 1
 [sst_vpaned_height] 436
 @28
@@ -55,7 +55,6 @@ testbench.dut.core.control.md.IorD
 testbench.dut.core.control.md.Jump
 testbench.dut.core.control.md.MemWrite
 testbench.dut.core.control.md.MemtoReg
-testbench.dut.core.control.md.PCSrc
 testbench.dut.core.control.md.PCWrite
 testbench.dut.core.control.md.RegDst
 testbench.dut.core.control.md.RegWrite
@@ -86,7 +85,7 @@ testbench.dut.core.dp.mainALU.mux1_out[31:0]
 -RAM
 @22
 testbench.dut.RAM.A[31:0]
-@28
+@29
 testbench.dut.RAM.Clk
 @22
 testbench.dut.RAM.RD[31:0]
@@ -95,14 +94,6 @@ testbench.dut.RAM.WD[31:0]
 testbench.dut.RAM.WE
 @200
 -ALUMux
-@22
-testbench.dut.core.dp.ALU_Mux.d0[31:0]
-testbench.dut.core.dp.ALU_Mux.d1[31:0]
-@28
-testbench.dut.core.dp.ALU_Mux.s
-@22
-testbench.dut.core.dp.ALU_Mux.y[31:0]
-@200
 -Instruction register
 @28
 testbench.dut.core.dp.instruction_reg.Clk
@@ -144,5 +135,14 @@ testbench.dut.core.dp.regFile.RD2[31:0]
 testbench.dut.core.dp.regFile.WD3[31:0]
 @28
 testbench.dut.core.dp.regFile.WE3
+@200
+-A3_Mux
+@22
+testbench.dut.core.dp.A3_Mux.d0[4:0]
+testbench.dut.core.dp.A3_Mux.d1[4:0]
+@28
+testbench.dut.core.dp.A3_Mux.s
+@22
+testbench.dut.core.dp.A3_Mux.y[4:0]
 [pattern_trace] 1
 [pattern_trace] 0
