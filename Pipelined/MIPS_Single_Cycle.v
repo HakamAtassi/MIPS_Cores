@@ -415,7 +415,7 @@ module equality_checker(A,B,Bool);  //checks equaliy of 2 32 bit values
     input [31:0] A, B;
     output reg Bool;
 
-    always @ (*)
+    always @ (*) begin
         if (A==B) Bool=1'b1;
         else Bool=1'b0;
     end
@@ -428,15 +428,18 @@ endmodule
 
 
 //module datapath(Clk,Reset,MemtoReg,PCSrc,ALUSrc,RegDst,RegWrite,Jump,ALUControl,Zero,PC,Instr,ALUOut,WriteData,ReadData);
+
+
+//NONE OF THE REGISTERS HAVE THE CLEARS/ENABLES FOR STALLING AND FLUSHING!!!
 module datapath(Clk,Reset,RegWriteD,MemtoRegD,MemWriteD,ALUControlD,ALUSrcD,RegDstD,BranchD,
-InstrD, ReadData,
+Instr, ReadData,
 StallF, StallD, ForwardAD,ForwardBD,FlushE,ForwardAE,ForwardBE,
 ALUOutM,WriteDataM,PCF,
-Opcode,Funct
+Opcode,Funct,
 BranchD,RsD,RtD,RsE,RtE,WriteRegE,MemtoRegE,RegWriteE,WriteRegM,MemtoRegM,RegWriteM,WriteRegW,RegWriteW
 );
 
-    input Clk,Reset,RegWriteD,MemtoRegD,MemWriteD,ALUSrcD,RegDstD,BranchD;
+    input Clk,Reset,RegWriteD,MemtoRegD,MemWriteD,ALUSrcD,RegDstD;
     input [2:0] ALUControlD;
 
 
@@ -444,7 +447,7 @@ BranchD,RsD,RtD,RsE,RtE,WriteRegE,MemtoRegE,RegWriteE,WriteRegM,MemtoRegM,RegWri
     input StallF, StallD, ForwardAD,ForwardBD,FlushE;
     input [1:0] ForwardAE,ForwardBE;
 
-    output [31:0] ALUOut,WriteDataM,PCF;
+    output [31:0] ALUOutM,WriteDataM,PCF;
     output [5:0] Opcode,Funct;
     output BranchD,MemtoRegE,RegWriteE,MemtoRegM,RegWriteM,RegWriteW;
     output [4:0] RsD,RtD,RsE,RtE,WriteRegE,WriteRegM,WriteRegW;
@@ -455,13 +458,17 @@ BranchD,RsD,RtD,RsE,RtE,WriteRegE,MemtoRegE,RegWriteE,WriteRegM,MemtoRegM,RegWri
 
 
 
-mux2 #(32) PC_prime_mux (PCPlus4F, PC_MUX_1, PCSrcD, PC_prime);
+    mux2 #(32) PC_prime_mux (PCPlus4F, PC_MUX_1, PCSrcD, PC_prime);
 
 
-flopr PC_prime_ff(Clk, Reset, PC_prime, PCF);
+    flopr PC_prime_ff(Clk, Reset, PC_prime, PCF);
 
-adder pcadd1(PCPlus4F,,1'b0,32'b100,PCF); //the adder for the Program counter iteration
+    adder pcadd1(PCPlus4F,,1'b0,32'b100,PCF); //the adder for the Program counter iteration
 
+
+    not(StallD_not,StallD);
+    flopr fetch_stage_RD(Clk,StallD_not, Instr,InstrD);
+    flopr fetch_stage_PCPlus4(Clk,StallD_not, ReadData, PCPlus4D);
 
 
 /*************************************************FETCH LOGIC ABOVE******************************************************/
@@ -493,6 +500,22 @@ adder pcadd1(PCPlus4F,,1'b0,32'b100,PCF); //the adder for the Program counter it
     and(PCSrcD,BranchD,EqualD);
 
 
+
+    flopr #(1) decode_stage_RegWriteD(Clk,,RegWriteD,RegWriteE);
+    flopr #(1) decode_stage_MemtoRegD(Clk,,MemtoRegD,MemtoRegE);
+    flopr #(1) decode_stage_MemWritD(Clk,,MemWritD,MemWriteE);
+    flopr #(2) decode_stage_ALUControlD(Clk,,ALUControlD,ALUControlE);
+    flopr #(1) decode_stage_ALUSrcD(Clk,,ALUSrcD,ALUSrcE);
+    flopr #(1) decode_stage_RegDstD(Clk,,RegDstD,RegDstE);
+
+
+    flopr #(5) decode_stage_RsD(Clk,,RsD,RsE);
+    flopr #(5) decode_stage_RtD(Clk,,RtD,RtE);
+    flopr #(5) decode_stage_RdD(Clk,,RdD,RdE);
+    flopr #(32) decode_stage_SignImmD(Clk,,SignImmD,SignImmE);
+
+
+
     /***********************************************DECODE LOGIC ABOVE***************************************************/
 
 
@@ -504,11 +527,11 @@ adder pcadd1(PCPlus4F,,1'b0,32'b100,PCF); //the adder for the Program counter it
     wire [31:0] SrcAE;
     mux_4_32b SrcA_mux(SrcAE, ForwardAE, RD1, ResultW, ALUOutM,);
 
-    wire [31:0] SrcBE,SrcBE_mux_in;
-    mux_4_32b SrcA_mux(SrcBE_mux_in, ForwardBE, RD2, ResultW, ALUOutM,);
+    wire [31:0] SrcBE,WriteDataE;
+    mux_4_32b SrcB_mux(WriteDataE, ForwardBE, RD2, ResultW, ALUOutM,);
 
     wire [31:0] SignImmE;
-    mux2 #(32) RD1_br_mux(SrcBE_mux_in,SignImmE, ALUSrcE, SrcBE);
+    mux2 #(32) SrcBE_mux(WriteDataE,SignImmE, ALUSrcE, SrcBE);
 
     wire [31:0] ALUResult;
     ALU mainALU(,ALUResult, , ALUControlE, SrcAE, SrcBE);
@@ -516,14 +539,36 @@ adder pcadd1(PCPlus4F,,1'b0,32'b100,PCF); //the adder for the Program counter it
 
     mux2 #(5) Rt_Rd_mux (RtE,RdE, RegDstE, WriteRegE);
 
+
+    flopr #(1) execute_stage_RegWriteE(Clk,,RegWriteE,RegWriteM);
+    flopr #(1) execute_stage_RegWriteE(Clk,,MemtoRegE,MemtoRegM);
+
+    wire MemWriteM;
+    flopr #(1) execute_stage_RegWriteE(Clk,,MemWriteE,MemWriteM);
+
+    flopr #(1) execute_stage_RegWriteE(Clk,,ALUResult,ALUOutM);
+    flopr #(1) execute_stage_RegWriteE(Clk,,WriteDataE,WriteDataM);
+
+    flopr #(5) execute_stage_RegWriteE(Clk,,WriteRegE,WriteRegM);
+
+
+
+
+
+
+
     /***********************************************EXECUTE LOGIC ABOVE***************************************************/
 
 
     /***********************************************MEM LOGIC BELOW***************************************************/
 
+    flopr #(32) Mem_stage_RegWriteE(Clk,,ALUOutM,ALUOutW);
+    flopr #(5) Mem_stage_RegWriteE(Clk,,WriteRegM,WriteRegW);
 
-    //ONLY REGISTER STUFF HERE
+    flopr #(32) Mem_stage_RegWriteE(Clk,,ReadData,ReadDataW);
 
+
+    
 
 
     /***********************************************MEM LOGIC ABOVE***************************************************/
